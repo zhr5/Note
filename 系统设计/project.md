@@ -76,6 +76,14 @@
 
 ![img](images/project/1661959061503-4f20310e-f918-4a0e-bf75-bb98b5e3e400.png)
 
+![Y9NZsU68fRICOPv4AYyC.png](images/project/Y9NZsU68fRICOPv4AYyC.png)
+
+
+
+- 公积金
+
+![公积金管理系统](images/project/公积金管理系统.png)
+
 ## 支付及结算业务需求分析：
 
 ### 1.维修资金系统支付结算需求
@@ -187,3 +195,8 @@
 8.稳定性、流量控制、性能优化
 
 9.资损防控体系、支付监控、风控
+
+
+
+
+
