@@ -49,6 +49,58 @@
 
 #### 
 
+分类
+
+## 二分查找
+
+[704. 二分查找](https://leetcode.cn/problems/binary-search/)
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        int l=0,r=nums.length-1;
+        while(l<=r){
+            int mid=l+(r-l)/2; // 当left==right，区间[left, right]依然有效，所以用 <=
+            if(target==nums[mid])   return mid;
+            else if(target>nums[mid]){
+                l=mid+1;
+            }else{
+                r=mid-1;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+[35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+```java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int left=0,right=nums.length-1;
+       while (left <= right) { // 当left==right，区间[left, right]依然有效
+            int middle = left + ((right - left) / 2);// 防止溢出 等同于(left + right)/2
+            if (nums[middle] > target) {
+                right = middle - 1; // target 在左区间，所以[left, middle - 1]
+            } else if (nums[middle] < target) {
+                left = middle + 1; // target 在右区间，所以[middle + 1, right]
+            } else { // nums[middle] == target
+                return middle;
+            }
+        }
+        // 分别处理如下四种情况
+        // 目标值在数组所有元素之前  [0, -1]
+        // 目标值等于数组中某一个元素  return middle;
+        // 目标值插入数组中的位置 [left, right]，return  right + 1
+        // 目标值在数组所有元素之后的情况 [left, right]， 因为是右闭区间，所以 return right + 1
+        return right + 1;
+    }
+}
+```
+
+
+
 #### <a id="锚点剑指03">剑指 Offer 03. 数组中重复的数字</a>
 
 分析：题目限定数组长度n，数组中的值在 0～n-1 的范围内
