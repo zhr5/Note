@@ -53,7 +53,7 @@
 
 ## 二分查找
 
-[704. 二分查找](https://leetcode.cn/problems/binary-search/)
+## [704. 二分查找](https://leetcode.cn/problems/binary-search/)
 
 ```java
 class Solution {
@@ -73,7 +73,7 @@ class Solution {
 }
 ```
 
-[35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+## [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
 
 ```java
 class Solution {
@@ -95,6 +95,104 @@ class Solution {
         // 目标值插入数组中的位置 [left, right]，return  right + 1
         // 目标值在数组所有元素之后的情况 [left, right]， 因为是右闭区间，所以 return right + 1
         return right + 1;
+    }
+}
+```
+
+## [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+```java
+class Solution {
+    public  int[] searchRange(int[] nums, int target) {
+        int leftBorder = getLeftBorder(nums, target);
+        int rightBorder = getRightBorder(nums, target);
+        // 情况一
+        if (leftBorder == -2 || rightBorder == -2) return new int[]{-1, -1};
+        // 情况三
+        if (rightBorder - leftBorder > 1) return new int[]{leftBorder + 1, rightBorder - 1};
+        // 情况二
+        return new int[]{-1, -1};
+    }
+
+    int getRightBorder(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        int rightBorder = -2; // 记录一下rightBorder没有被赋值的情况
+        while (left <= right) {
+            int middle = left + ((right - left) / 2);
+            if (nums[middle] > target) {
+                right = middle - 1;
+            } else { // 寻找右边界，nums[middle] == target的时候更新left
+                left = middle + 1;
+                rightBorder = left;
+            }
+        }
+        return rightBorder;
+    }
+
+    int getLeftBorder(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        int leftBorder = -2; // 记录一下leftBorder没有被赋值的情况
+        while (left <= right) {
+            int middle = left + ((right - left) / 2);
+            if (nums[middle] >= target) { // 寻找左边界，nums[middle] == target的时候更新right
+                right = middle - 1;
+                leftBorder = right;
+            } else {
+                left = middle + 1;
+            }
+        }
+        return leftBorder;
+    }
+}
+```
+
+
+
+## [69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
+
+方法一：二分查找
+
+```java
+class Solution {
+    public int mySqrt(int x) {
+        int l = 0, r = x, ans = -1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if ((long) mid * mid <= x) {
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+方法二：牛顿迭代法
+
+求$X^2-a=0$ 的解，过$X_n$作切线得 $Y=2X_n(X-X_n)+{X_{(n)}}^2-a$ 
+
+与横轴的交点为方程$2X_n(X-X_n)+{X_{(n)}}^2-a=0$的解，即为新的迭代结果 $X_{(n+1)}$:
+$$
+X_{(n+1)}=\frac{1}{2}  (\frac{a}{X_n}+X_n)        
+$$
+
+
+注意==`int*int`== 会溢出  使用long存储乘积
+
+```
+class Solution {
+    public int mySqrt(int x) {
+        if (x<2) return x;
+        long r=x;
+        while(r*r>x){
+            r=(r+x/r)/2;
+        }
+        return Long.valueOf(r).intValue();
     }
 }
 ```
