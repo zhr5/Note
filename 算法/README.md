@@ -215,8 +215,8 @@ class Solution {
       while(left<=right){
         int mid=left+(right-left)/2;
         if(target==nums[mid]) return mid;
-        if(nums[left]<nums[mid]){//假设左边有序
-            if(nums[left]<=target&&nums[right]>target){//target在左边有序区间内(左边为什么是等号)
+        if(nums[left]<=nums[mid]){//假设左边有序
+            if(nums[left]<=target&&nums[mid]>target){//target在左边有序区间内(左边为什么是等号)
               right=mid-1;
             }else{
               left=mid+1;
