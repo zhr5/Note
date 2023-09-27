@@ -49,11 +49,11 @@
 
 #### 
 
-分类
+## 分类
 
-## 二分查找
+### 二分查找
 
-## [704. 二分查找](https://leetcode.cn/problems/binary-search/)
+#### [704. 二分查找](https://leetcode.cn/problems/binary-search/)
 
 ```java
 class Solution {
@@ -73,7 +73,7 @@ class Solution {
 }
 ```
 
-## [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+#### [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
 
 ```java
 class Solution {
@@ -99,7 +99,7 @@ class Solution {
 }
 ```
 
-## [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+#### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
 ```java
 class Solution {
@@ -150,9 +150,9 @@ class Solution {
 
 
 
-## [69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
+#### [69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
 
-方法一：二分查找
+##### 方法一：二分查找
 
 ```java
 class Solution {
@@ -172,13 +172,13 @@ class Solution {
 }
 ```
 
-方法二：牛顿迭代法
+##### 方法二：牛顿迭代法
 
 求$X^2-a=0$ 的解，过$X_n$作切线得 $Y=2X_n(X-X_n)+{X_{(n)}}^2-a$ 
 
 与横轴的交点为方程$2X_n(X-X_n)+{X_{(n)}}^2-a=0$的解，即为新的迭代结果 $X_{(n+1)}$:
 $$
-X_{(n+1)}=\frac{1}{2}  (\frac{a}{X_n}+X_n)        
+X_{(n+1)}=\frac{1}{2}  (\frac{a}{X_n}+X_n)
 $$
 
 
@@ -186,13 +186,71 @@ $$
 
 ```
 class Solution {
-    public int mySqrt(int x) {
+    public int mySqrt(int x) {//令x=a，通过迭代不断逼近a的平方根
         if (x<2) return x;
         long r=x;
         while(r*r>x){
             r=(r+x/r)/2;
         }
         return Long.valueOf(r).intValue();
+    }
+}
+```
+
+#### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
+
+解析 ：
+
+```yaml
+将数组一分为二，其中一定有一个是有序的，另一个可能是有序，也能是部分有序。
+此时有序部分用二分法查找。无序部分再一分为二，其中一个一定有序，另一个可能有序，可能无序。就这样循环
+```
+
+```Java
+class Solution {
+    public int search(int[] nums, int target) {
+      if(nums.length==0) return -1;
+      if(nums.length==1) return nums[0]==target? 0:-1;
+      int left=0,right=nums.length-1;
+      while(left<=right){
+        int mid=left+(right-left)/2;
+        if(target==nums[mid]) return mid;
+        if(nums[left]<nums[mid]){//假设左边有序
+            if(nums[left]<=target&&nums[right]>target){//target在左边有序区间内(左边为什么是等号)
+              right=mid-1;
+            }else{
+              left=mid+1;
+            }
+        }else{//假设右边有序
+          if(nums[mid]<target&&nums[right]>=target){//target在右边有序区间内(右边为什么是等号)
+              left=mid+1;
+          }else{
+              right=mid-1;
+          }
+        }
+      }
+      return -1;
+    }
+}
+```
+
+#### [367. 有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/)
+
+```java
+class Solution {
+    public boolean isPerfectSquare(int num) {
+        int l = 0, r = num, ans = -1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if ((long) mid * mid <= num) {//防止int*int溢出
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        if(ans*ans==num)    return true;
+        else return false;
     }
 }
 ```
@@ -915,28 +973,27 @@ class Solution {
 ```Java
 class Solution {
     public int search(int[] nums, int target) {
-        if(nums.length==0) return -1;
-        if(nums.length==1) return nums[0]==target ? 0 : -1 ;
-        int l=0,r=nums.length-1;
-        while(l <= r){
-            int mid=(l+r)/2;
-            if(target==nums[mid]) return mid;
-            //假设左边有序
-            if(nums[l] <= nums[mid]){
-                if(nums[l] <= target && nums[mid] > target){
-                    r=mid-1;
-                }else{
-                    l=mid+1;
-                }
+      if(nums.length==0) return -1;
+      if(nums.length==1) return nums[0]==target? 0:-1;
+      int left=0,right=nums.length-1;
+      while(left<=right){
+        int mid=left+(right-left)/2;
+        if(target==nums[mid]) return mid;
+        if(nums[left]<nums[mid]){//假设左边有序
+            if(nums[left]<=target&&nums[right]>target){//target在左边有序区间内(左边为什么是等号)
+              right=mid-1;
             }else{
-                if(nums[mid]<target && nums[r] >= target){
-                    l=mid+1;
-                }else{
-                    r=mid-1;
-                }
+              left=mid+1;
             }
+        }else{//假设右边有序
+          if(nums[mid]<target&&nums[right]>=target){//target在右边有序区间内(右边为什么是等号)
+              left=mid+1;
+          }else{
+              right=mid-1;
+          }
         }
-        return -1;
+      }
+      return -1;
     }
 }
 ```
