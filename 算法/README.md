@@ -49,7 +49,9 @@
 
 #### 
 
-## 分类
+# 分类
+
+## 数组
 
 ### 二分查找
 
@@ -254,6 +256,80 @@ class Solution {
     }
 }
 ```
+
+### 移除元素
+
+#### [27. 移除元素](https://leetcode.cn/problems/remove-element/)
+
+```java
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        int i=0,p=0;
+        while(p<=nums.length-1){
+            if(nums[p]!=val){
+                nums[i++]=nums[p];
+            }
+            p++;
+        }
+        return i;
+    }
+}
+```
+
+#### [26. 删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
+
+```java
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int i=0,p=1;
+        while(p<=nums.length-1){
+            if(nums[p]!=nums[i]){
+                nums[++i]=nums[p];
+            }
+            p++;
+        }
+        return i+1;
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
