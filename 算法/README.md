@@ -7,7 +7,7 @@
 | Two Pointer    | [3.无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/) | M     | [点击跳转](#锚点名2)    |
 | Two Pointer    | [11.盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/) | M     | [点击跳转](#锚点名11)   |
 | Stack          | [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/) | E     | [点击跳转](#锚点名20)   |
-| Array \|Matrix | [74. 搜索二维矩阵](https://leetcode-cn.com/problems/search-a-2d-matrix/) | M     | [点击跳转](#锚点名74)   |
+| Array Matrix | [74. 搜索二维矩阵](https://leetcode-cn.com/problems/search-a-2d-matrix/) | M     | [点击跳转](#锚点名74)   |
 | Tree           | [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/) | E     | [点击跳转](#锚点名101)  |
 | Tree           | [104.二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/) | E     | [点击跳转](#锚点名104)  |
 | Tree           | [110.平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/) | E     | [点击跳转](#锚点名110)  |
@@ -19,14 +19,14 @@
 | Stack          | [225. 用队列实现栈](https://leetcode-cn.com/problems/implement-stack-using-queues/) | E     |                         |
 | Tree           | [226.翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/) | E     |                         |
 | Queue          | [232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/) | E     |                         |
-| Array\|Matrix  | [240. 搜索二维矩阵 II](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/) | M     |                         |
+| Array Matrix  | [240. 搜索二维矩阵 II](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/) | M     |                         |
 | Array          | [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/) | E     |                         |
 | Tree           | [404. 左叶子之和](https://leetcode-cn.com/problems/sum-of-left-leaves/) | E     |                         |
 | Tree           | [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/) | M     |                         |
 | Array          | [485. 最大连续 1 的个数](https://leetcode-cn.com/problems/max-consecutive-ones/) | E     |                         |
-| Array\|Matrix  | [503. 下一个更大元素 II](https://leetcode-cn.com/problems/next-greater-element-ii/) | M     |                         |
+| Array Matrix  | [503. 下一个更大元素 II](https://leetcode-cn.com/problems/next-greater-element-ii/) | M     |                         |
 | Tree           | [543.二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) | E     |                         |
-| Array\|Matrix  | [566. 重塑矩阵](https://leetcode-cn.com/problems/reshape-the-matrix/) | E     |                         |
+| Array Matrix  | [566. 重塑矩阵](https://leetcode-cn.com/problems/reshape-the-matrix/) | E     |                         |
 | Tree           | [572. 另一个树的子树](https://leetcode-cn.com/problems/subtree-of-another-tree/) | E     |                         |
 | Tree           | [617.合并二叉树](https://leetcode-cn.com/problems/merge-two-binary-trees/) | E     |                         |
 | dfs            | [687. 最长同值路径](https://leetcode-cn.com/problems/longest-univalue-path/) | M     |                         |
