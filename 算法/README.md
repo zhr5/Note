@@ -311,6 +311,146 @@ class Solution {
 
 
 
+## 哈希表
+
+#### [1. 两数之和](https://leetcode.cn/problems/two-sum/)
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer,Integer> mp=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            if(mp.containsKey(target-nums[i])){
+                return new int []{mp.get(target - nums[i]), i};
+            }
+            mp.put(nums[i],i);
+        }
+        return new int[0];
+    }
+}
+```
+
+#### [49. 字母异位词分组](https://leetcode.cn/problems/group-anagrams/)
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String,List<String>> mp=new HashMap<String,List<String>>();
+        for(String str:strs){
+            char [] array=str.toCharArray();
+            Arrays.sort(array);
+            String key=new String(array);
+            List<String> list = mp.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            mp.put(key,list);
+        }
+        return new ArrayList<List<String>>(mp.values());
+    }
+}
+```
+
+#### [128. 最长连续序列](https://leetcode.cn/problems/longest-consecutive-sequence/)
+
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int max=0;
+        Set<Integer> st=new HashSet<Integer>();
+        for(int i=0;i<nums.length;i++){
+            st.add(nums[i]);
+        }
+        for(int i=0;i<nums.length;i++){
+            if(!st.contains(nums[i]-1)){//增加跳过的逻辑  可从O(n^2)优化到O(n) 保证每个数字只走一次while即只为增长序列的起始位置才开始算
+            int a=nums[i];
+            int t=1;
+            while(st.contains(a+1)){
+                t++;
+                a++;
+            }
+            if(t>max) max=t;
+            }
+        }
+        return max;
+    }
+}
+```
+
+## 双指针
+
+#### [283. 移动零](https://leetcode.cn/problems/move-zeroes/)
+
+```java
+class Solution {
+    public void moveZeroes(int[] nums) {
+       int index=0;
+       for(int i=0;i<nums.length;i++){
+           if(nums[i]!=0){
+               nums[index++]=nums[i];
+           }
+       }
+       for(int j=index;j<nums.length;j++){
+           nums[index++]=0;
+       }
+    }  
+}
+```
+
+#### [11. 盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
+
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int l=0,r=height.length-1,max=0;
+        while(l<r){
+            max=Math.max(max,Math.min(height[l],height[r])*(r-l));
+            if(height[r]>height[l]) l++;
+            else{
+                r--;
+            }
+        }
+        return max;
+    }
+}
+```
+
+
+
+#### [15. 三数之和](https://leetcode.cn/problems/3sum/)
+
+```java
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res=new ArrayList<>();
+        Arrays.sort(nums);
+        Set<Integer> st=new HashSet<Integer>();
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]>0) return res; //第一个必须未非正数才能找到加起来为0的
+            if(i>0 && nums[i]==nums[i-1]) continue;//重复数字往前走
+            int l=i+1,r=nums.length-1;
+            while(l<r){
+                int tmp=nums[i]+nums[l]+nums[r];
+                if(tmp==0){
+                    List<Integer> list = new ArrayList<>();
+                    list.add(nums[i]);
+                    list.add(nums[l]);
+                    list.add(nums[r]);
+                    res.add(list);
+                    while(l<r&&nums[l]==nums[l+1]) ++l;//遇到新的重复的直接往前走,缺少这步会导致第二个第三个重复
+                    while(l<r&&nums[r]==nums[r-1]) --r;
+                    l++;
+                    r--;//指针继续往中间走到第一个与前一个不相同的数字的下标上
+                }else if(tmp<0){
+                    l++;
+                }else{
+                    r--;
+                }
+            }
+            
+        }
+        return res;
+    }
+}
+```
 
 
 
@@ -328,18 +468,7 @@ class Solution {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+## 剑指offer
 
 #### <a id="锚点剑指03">剑指 Offer 03. 数组中重复的数字</a>
 
@@ -2286,11 +2415,21 @@ class Solution {
 }
 ```
 
+String  常用的方法
 
+```java
+toCharArray()
+length()
+charAt()
+```
 
-String   length()    charAt
+HashMap常用方法
 
-nums[]   length
+```java
+values() //返回包含所有键值的Collection<V>
+```
+
+Collection   Arrays
 
 stack   Deque
 
