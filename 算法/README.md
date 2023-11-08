@@ -305,9 +305,56 @@ class Solution {
 
 
 
+## 链表
 
+#### [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
 
+```java
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if(k==1) return head;
+        ListNode preHead = new ListNode();//全链表头节点
+        preHead.next=head;
+        ListNode pre=preHead;//存储每一组的前一个节点
+        while(head!=null){//head作为工作指针
+            ListNode p=pre;//p开始是指向每一组的前一个节点(开)，然后前进到每组的最后一个节点(闭)
+            int i=0;
+            while(i++<k){
+                p=p.next;
+                if(p==null){
+                    return preHead.next;//遇到不足k个的，直接返回整个链表结束
+                }
+            }
 
+            ListNode nex = p.next; //保存下一组的起始节点
+            ListNode [] res = reverse (head,p);
+            head=res[0];
+            p=res[1];
+            ////把子链表重新接回原链表
+            pre.next=head;
+            p.next=nex;
+            pre=p;
+            head=p.next;
+
+        }
+
+        return preHead.next;
+    }
+
+    public ListNode [] reverse(ListNode l,ListNode r){
+        //反转【l,r】并返回节点起始和结束节点
+        ListNode prev=r.next;
+        ListNode p=l;
+        while(prev!=r){
+            ListNode nex = p.next;
+            p.next = prev;
+            prev = p;
+            p = nex;
+        }
+        return new ListNode []{r,l};
+    }
+}
+```
 
 
 
