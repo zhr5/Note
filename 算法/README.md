@@ -303,7 +303,16 @@ class Solution {
 
 
 
+## 链表
 
+#### [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
+
+```java
+class Solution {
+     public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode hair= new  ListNode();//初始虚拟头节点
+        hair.next = head;
+        ListNode pre = hair;//用于存储每组的前一个节点
 
 ## 链表
 
@@ -356,6 +365,15 @@ class Solution {
 }
 ```
 
+        while(head!=null){
+           
+            ListNode tail = pre;
+
+            for(int i=0; i<k ; i++ ){
+                tail = tail.next;
+                if(tail==null)
+                return hair.next;
+            }
 
 
 ## 哈希表
@@ -460,7 +478,19 @@ class Solution {
 }
 ```
 
+            ListNode nex = tail.next; //保存下一组的起始节点
+            ListNode [] res=reverse(head,tail);
+            head = res[0];
+            tail = res[1];
+            //把子链表重新接回原链表
+            pre.next = head;
+            tail.next = nex;
+            pre = tail;
+            head = tail.next;
 
+        }
+        return hair.next;
+    }
 
 #### [15. 三数之和](https://leetcode.cn/problems/3sum/)
 
@@ -499,6 +529,19 @@ class Solution {
 }
 ```
 
+    public ListNode[] reverse(ListNode head,ListNode tail){//每组的起始-终点节点
+        ListNode prev = tail.next;
+        ListNode p = head;
+        while (prev != tail) {
+            ListNode nex = p.next;
+            p.next = prev;
+            prev = p;
+            p = nex;
+        }
+        return new ListNode[]{tail, head};
+    }
+}
+```
 
 
 
