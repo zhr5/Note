@@ -308,17 +308,7 @@ class Solution {
 #### [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
 
 ```java
-class Solution {
-     public ListNode reverseKGroup(ListNode head, int k) {
-        ListNode hair= new  ListNode();//初始虚拟头节点
-        hair.next = head;
-        ListNode pre = hair;//用于存储每组的前一个节点
 
-## 链表
-
-#### [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
-
-```java
 class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
         if(k==1) return head;
@@ -352,6 +342,7 @@ class Solution {
 
     public ListNode [] reverse(ListNode l,ListNode r){
         //反转【l,r】并返回节点起始和结束节点
+        //迭代法反转链表
         ListNode prev=r.next;
         ListNode p=l;
         while(prev!=r){
@@ -364,16 +355,6 @@ class Solution {
     }
 }
 ```
-
-        while(head!=null){
-           
-            ListNode tail = pre;
-
-            for(int i=0; i<k ; i++ ){
-                tail = tail.next;
-                if(tail==null)
-                return hair.next;
-            }
 
 
 ## 哈希表
@@ -478,20 +459,6 @@ class Solution {
 }
 ```
 
-            ListNode nex = tail.next; //保存下一组的起始节点
-            ListNode [] res=reverse(head,tail);
-            head = res[0];
-            tail = res[1];
-            //把子链表重新接回原链表
-            pre.next = head;
-            tail.next = nex;
-            pre = tail;
-            head = tail.next;
-
-        }
-        return hair.next;
-    }
-
 #### [15. 三数之和](https://leetcode.cn/problems/3sum/)
 
 ```java
@@ -529,18 +496,41 @@ class Solution {
 }
 ```
 
-    public ListNode[] reverse(ListNode head,ListNode tail){//每组的起始-终点节点
-        ListNode prev = tail.next;
-        ListNode p = head;
-        while (prev != tail) {
-            ListNode nex = p.next;
-            p.next = prev;
-            prev = p;
-            p = nex;
+
+
+#### [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
+
+```java
+//双指针优化版
+class Solution {
+    public int trap(int[] height) {
+        int length = height.length;
+        if (length <= 2) return 0;
+        int[] maxLeft = new int[length];
+        int[] maxRight = new int[length];
+        
+        // 记录每个柱子左边柱子最大高度
+        maxLeft[0] = height[0];
+        for (int i = 1; i< length; i++) maxLeft[i] = Math.max(height[i], maxLeft[i-1]);
+        
+        // 记录每个柱子右边柱子最大高度
+        maxRight[length - 1] = height[length - 1];
+        for(int i = length - 2; i >= 0; i--) maxRight[i] = Math.max(height[i], maxRight[i+1]);
+        
+        // 求和
+        int sum = 0;
+        for (int i = 0; i < length; i++) {
+            int count = Math.min(maxLeft[i], maxRight[i]) - height[i];
+            if (count > 0) sum += count;//凸形的可能为负，不需要累计
         }
-        return new ListNode[]{tail, head};
+        return sum;
     }
 }
+```
+
+```
+//双指针普通版
+
 ```
 
 
@@ -558,7 +548,6 @@ class Solution {
 
 
 
-## 剑指offer
 
 #### <a id="锚点剑指03">剑指 Offer 03. 数组中重复的数字</a>
 
@@ -567,6 +556,7 @@ class Solution {
 方法一：
 
 ```java
+
 class Solution {
     public int findRepeatNumber(int[] nums) {
         int [] tags=new int[nums.length];
