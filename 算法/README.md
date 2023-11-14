@@ -357,6 +357,48 @@ class Solution {
 ```
 
 
+
+#### [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+```java
+//头插法
+class Solution {
+    public ListNode reverseList(ListNode head) {     
+        ListNode preHead=new ListNode();
+        ListNode p=head;
+        ListNode q=null;
+        while(p!=null){
+            q=p.next;
+            p.next=preHead.next;
+            preHead.next=p;
+            p=q;           
+        }
+        return preHead.next;
+    }
+}
+```
+
+
+
+```java
+//迭代法  p为工作指针，prev为p的前置，每次将p.next指向prev
+class Solution {
+    public ListNode reverseList(ListNode head) {     
+        ListNode prev=null;
+        ListNode p=head;
+        while(p!=null){
+            ListNode nex = p.next;
+            p.next = prev;
+            prev = p;
+            p = nex;
+        }
+        return prev;
+    }
+}
+```
+
+
+
 ## 哈希表
 
 #### [1. 两数之和](https://leetcode.cn/problems/two-sum/)
