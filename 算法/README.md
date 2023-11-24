@@ -543,9 +543,32 @@ class Solution {
 #### [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
 
 ```java
+class Solution {
+    public int trap(int[] height) {
+        //按列计算，找到两边最高柱中的较低者
+        int length = height.length;
+        if (length <= 2) return 0;        
+        int sum = 0;
+        for(int i=1;i<length-1;i++){//两个边无法接水
+            //遍历时往两边找到最高的柱子
+            int  maxLeft =height[i];
+            int  maxRight =height[i];
+            for (int j = i+1; j< length; j++) maxLeft = Math.max(height[j], maxLeft);
+            for (int k = i-1; k>=0; k--)      maxRight = Math.max(height[k], maxRight);
+            int count = Math.min(maxLeft, maxRight) - height[i];
+            if (count > 0) sum += count;//凸形的可能为负，不需要累计
+        }
+        
+        return sum;
+    }
+}
+```
+
+```java
 //双指针优化版
 class Solution {
     public int trap(int[] height) {
+        //按列计算，找到两边最高柱中的较低者
         int length = height.length;
         if (length <= 2) return 0;
         int[] maxLeft = new int[length];
@@ -570,12 +593,9 @@ class Solution {
 }
 ```
 
-```
-//双指针普通版
-
-```
 
 
+## 滑动窗口
 
 
 
