@@ -597,13 +597,256 @@ class Solution {
 
 ## 滑动窗口
 
+滑动窗口模板
+
+```c++
+int left = 0, right = 0;
+
+while (right < s.size()) {
+    // 增大窗口
+    window.add(s[right]);
+    right++;
+
+    while (window needs shrink) {
+        // 缩小窗口
+        window.remove(s[left]);
+        left++;
+    }
+}
+```
 
 
 
+#### [3. 无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
+
+```java
+//通过Set辅助判断重复，滑动时剔除左边窗口值
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set=new HashSet<>();//存储从l到r的子串字符
+        int l=0,r=0,res=0;
+        while(l<s.length()){
+            if(res>s.length()-l-1)
+                break;//提前结束
+
+            while(r<s.length()&&!set.contains(s.charAt(r))){
+                set.add(s.charAt(r));
+                r++;
+            }
+            res=Math.max(res,r-l);
+            while(r<s.length()&&set.contains(s.charAt(r))){//
+                set.remove(s.charAt(l));
+                l++;
+            }
+
+        }
+
+        return res;
+    }
+}
+```
+
+#### [438. 找到字符串中所有字母异位词](https://leetcode.cn/problems/find-all-anagrams-in-a-string/)
+
+字符题，可通过 **s.charAt(i) - 'a'** 作为下标 ，本题不考虑输出顺序，只需要记录**s.charAt(i) - 'a'**出现次数
+
+使用了工具**Arrays.equals**判断两个数组是否相等
+
+```java
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        int sLen = s.length(), pLen = p.length();
+
+        if (sLen < pLen) {
+            return new ArrayList<Integer>();
+        }
+
+        List<Integer> ans = new ArrayList<Integer>();
+         //建立两个数组存放字符串中字母出现的词频，并以此作为标准比较
+        int[] sCount = new int[26];
+        int[] pCount = new int[26];
+         //当滑动窗口的首位在s[0]处时 （相当于放置滑动窗口进入数组）
+        for (int i = 0; i < pLen; ++i) {
+            ++sCount[s.charAt(i) - 'a'];//记录s中前pLen个字母的词频
+            ++pCount[p.charAt(i) - 'a'];//记录要寻找的字符串中每个字母的词频(只用进行一次来确定)
+        }
+        //判断放置处是否有异位词     (在放置时只需判断一次)
+        if (Arrays.equals(sCount, pCount)) {
+            ans.add(0);
+        }
+        //开始让窗口进行滑动
+        for (int i = 0; i < sLen - pLen; ++i) {//i是滑动前的首位
+            --sCount[s.charAt(i) - 'a'];//将滑动前首位的词频删去
+            ++sCount[s.charAt(i + pLen) - 'a'];//增加滑动后最后一位的词频（以此达到滑动的效果）
+            //判断滑动后处，是否有异位词
+            if (Arrays.equals(sCount, pCount)) {
+                ans.add(i + 1);
+            }
+        }
+
+        return ans;
+
+    }
+}
+```
 
 
 
+## 子串
 
+#### [560. 和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)
+
+✔✔✔**前缀和**
+
+使用了**Map.getOrDefault(pre, 0)** 获取默认值，常规操作
+
+```java
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+    /*
+    使用前缀和的方法可以解决这个问题，因为我们需要找到和为k的连续子数组的个数.
+    通过计算前缀和，我们可以将问题转化为求解两个前缀和之差等于k的情况。
+    假设数组的前缀和数组为prefixSum，其中prefixSum[i]表示从数组起始位置
+    到第i个位置的元素之和。那么对于任意的两个下标i和j（i < j），如果
+    prefixSum[j] - prefixSum[i] = k，即从第i个位置到第j个位置的元素之和等于k，
+    那么说明从第i+1个位置到第j个位置的连续子数组的和为k。
+    通过遍历数组，计算每个位置的前缀和，并使用一个哈希表来存储每个前缀和
+    出现的次数。在遍历的过程中，我们检查是否存在prefixSum[j] - k的前缀和，
+    如果存在，说明从某个位置到当前位置的连续子数组的和为k，我们将对应的次数累加到结果中。
+    这样，通过遍历一次数组，我们可以统计出和为k的连续子数组的个数，并且时间复杂度为O(n)，其中n为数组的长度。
+    */
+        int count = 0, pre = 0;
+        HashMap < Integer, Integer > mp = new HashMap < > ();
+        mp.put(0, 1);//如果没有这个初始化，那么sum-k=0时，map中没有0，判断为false，就会漏掉这种情况
+        for (int i = 0; i < nums.length; i++) {
+            pre += nums[i];
+            if (mp.containsKey(pre - k)) {
+                count += mp.get(pre - k);
+            }
+            mp.put(pre, mp.getOrDefault(pre, 0) + 1);
+        }
+        return count;
+
+    }
+}
+```
+
+
+
+#### [239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
+
+```java
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(nums.length == 0 || k == 0) return new int[0];
+        Deque<Integer> deque = new LinkedList<>();
+        int[] res = new int[nums.length - k + 1];
+        for(int j = 0, i = 1 - k; j < nums.length; i++, j++) {
+            // 删除 deque 中对应的 nums[i-1]
+            if(i > 0 && deque.peekFirst() == nums[i - 1])
+                deque.removeFirst();
+            // 保持 deque 递减
+            while(!deque.isEmpty() && deque.peekLast() < nums[j])
+                deque.removeLast();
+            deque.addLast(nums[j]);
+            // 记录窗口最大值
+            if(i >= 0)
+                res[i] = deque.peekFirst();
+        }
+        return res;
+    }
+}
+```
+
+#### [76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/)
+
+```java
+class Solution {
+    public String minWindow(String s, String t) {
+         char[] chars = s.toCharArray(), chart = t.toCharArray();
+        int n = chars.length, m = chart.length;
+
+        int[] hash = new int[128];
+        for (char ch : chart) hash[ch]--;
+
+        String res = "";
+        for (int i = 0, j = 0, cnt = 0; i < n; i++) {
+            hash[chars[i]]++;
+            if (hash[chars[i]] <= 0) cnt++;
+            while (cnt == m && hash[chars[j]] > 0) hash[chars[j++]]--;
+            if (cnt == m)
+                if (res.equals("") || res.length() > i - j + 1)
+                    res = s.substring(j, i + 1);
+        }
+        return res;
+    }
+}
+```
+
+## 普通数组
+
+#### [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int [] dp=new int [nums.length];//表示以i为结尾的最大连续子数组
+        //dp[i]=max(dp[i-1]+nums[i],nums[i])
+        dp[0]=nums[0];
+        int max=nums[0];
+        for(int i=1;i<nums.length;i++){
+            dp[i]=Math.max(dp[i-1]+nums[i],nums[i]);
+            max=Math.max(dp[i],max);
+        }
+        return max;
+    }
+}
+```
+
+#### [238. 除自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/)
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int len=nums.length;
+        int [] res=new int [len];
+        Arrays.fill(res,1);
+        int Lsum=1;
+        int Rsum=1;
+
+        for(int i=0;i<len;i++){
+            res[i]*=Lsum;
+            res[len-1-i]*=Rsum;
+            Lsum*=nums[i];
+            Rsum*=nums[len-1-i];
+        }
+
+        return res;
+
+    }
+}
+```
+
+
+
+## 回溯
+
+回溯模板
+
+```java
+void backtracking(参数) {
+    if (终止条件) {
+        存放结果;
+        return;
+    }
+
+    for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
+        处理节点;
+        backtracking(路径，选择列表); // 递归
+        回溯，撤销处理结果
+    }
+}
+```
 
 
 
