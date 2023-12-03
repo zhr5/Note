@@ -571,7 +571,7 @@ class Solution {
         //按列计算，找到两边最高柱中的较低者
         int length = height.length;
         if (length <= 2) return 0;
-        int[] maxLeft = new int[length];
+        int[] maxLeft = new int[length]; //maxLeft[i]表示
         int[] maxRight = new int[length];
         
         // 记录每个柱子左边柱子最大高度
@@ -849,6 +849,10 @@ void backtracking(参数) {
 ```
 
 #### [46. 全排列](https://leetcode.cn/problems/permutations/)
+
+
+## 滑动窗口
+
 
 
 

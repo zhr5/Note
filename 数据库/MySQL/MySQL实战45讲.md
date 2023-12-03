@@ -62,6 +62,8 @@ https://www.yuque.com/fcant/sql/tlxo8c#n93xJ
 
 ![image-20231127193539017](images/MySQL实战45讲/image-20231127193539017.png)
 
+![image-20231203162028094](images/MySQL%E5%AE%9E%E6%88%9845%E8%AE%B2/image-20231203162028094.png)
+
 **跳表、LSM 树？**
 
 ### 索引维护
@@ -86,7 +88,7 @@ https://www.yuque.com/fcant/sql/tlxo8c#n93xJ
 
  
 
-```
+```mysql
 alter table T engine=InnoDB
 ```
 
@@ -97,6 +99,16 @@ alter table T engine=InnoDB
 （对于唯一索引来说，所有的更新操作都要先判断这个操作是否违反唯一性约束。比如，要插入 (4,400) 这个记录，就要先判断现在表中是否已经存在 k=4 的记录，而这必须要将数据页读入内存才能判断。如果都已经读入到内存了，那直接更新内存会更快，就没必要使用 change buffer 了。）
 
 **redo log** 主要节省的是随机写磁盘的 IO 消耗（转成顺序写），而 **change buffer** 主要节省的则是随机读磁盘的 IO 消耗。
+
+#### 选错索引
+
+```mysql
+show index from t;
+```
+
+#### 索引选择
+
+
 
 ## 锁
 
