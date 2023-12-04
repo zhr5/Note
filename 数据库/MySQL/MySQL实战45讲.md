@@ -108,7 +108,10 @@ show index from t;
 
 #### 索引选择
 
-
+- 直接创建完整索引，这样可能比较占用空间；
+- 创建前缀索引，节省空间，但会增加查询扫描次数，并且不能使用覆盖索引；
+- 倒序存储，再创建前缀索引，用于绕过字符串本身前缀的区分度不够的问题；
+- 创建 hash 字段索引，查询性能稳定，有额外的存储和计算消耗，跟第三种方式一样，都不支持范围扫描。
 
 ## 锁
 
@@ -127,6 +130,21 @@ show index from t;
 
 怎么解决由这种热点行更新导致的性能问题呢？
 
+## 页
+
+![image-20231204123721695](images/MySQL实战45讲/image-20231204123721695.png)
+
+#### **Buffer Pool**
+
+[**InnoDB 的 Buffer Pool**](https://www.yuque.com/fcant/sql/gqngg9)
+
+#### Buffer Pool的flush场景
+
+- redo log 写满了，要 flush 脏页
+- 内存不够用了，要先将脏页写到磁盘
+- 当mysql系统认为空闲的时候，会刷新脏页到磁盘。
+- 当mysql服务器正常关闭，会刷新脏页到磁盘。
+
 ## 事务
 
 ![image-20231128162446551](images/MySQL实战45讲/image-20231128162446551.png)
@@ -136,3 +154,8 @@ show index from t;
 
 
 begin/start transaction 命令并不是一个事务的起点，在执行到它们之后的第一个操作 InnoDB 表的语句，事务才真正启动。如果你想要马上启动一个事务，可以使用 start transaction with consistent snapshot 这个命令
+
+**Buffer Pool**
+
+[**InnoDB 的 Buffer Pool**](https://www.yuque.com/fcant/sql/gqngg9)
+
