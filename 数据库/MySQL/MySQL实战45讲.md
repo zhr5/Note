@@ -30,6 +30,17 @@
 
 著作权归@pdai所有 原文链接：https://pdai.tech/md/db/sql-mysql/sql-mysql-execute.html
 
+#### 两阶段提交
+
+![img](images/MySQL%E5%AE%9E%E6%88%9845%E8%AE%B2/ee9af616e05e4b853eba27048351f62a.jpg)
+
+
+
+##### 在两阶段提交的不同时刻，MySQL 异常重启会出现什么现象
+
+- 时刻A：
+- 时刻B:
+
 
 
 **BinLog、RedoLog、UndoLog**
