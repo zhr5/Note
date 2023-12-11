@@ -179,7 +179,19 @@ MDL写锁：当我们对表结构进行修改的时候会加MDL写锁。
 - 当mysql系统认为空闲的时候，会刷新脏页到磁盘。
 - 当mysql服务器正常关闭，会刷新脏页到磁盘。
 
-重建表空间
+#### MySQL的所有buffer
+
+- buffer pool，缓存数据页，避免频繁地磁盘交互，内部利用定制的 LRU 来淘汰缓存页，LRU分老年代和新生代（热区域称为young区域，冷区域称为old区域,**冷热数据分离设计**）。
+
+- change buffer，用于二级非唯一索引的新增、修改或删除操作，当 buffer pool 没有数据的时候，不需要加载数据页到缓冲池中，而是通过 change buffer 来记录此变更，减少随机 I/O。
+
+- log buffer，用于 redo log 的缓冲，减少 I/O，批处理减少系统调用。
+
+- doublewrite buffer，用于部分页面写问题，双写数据页，坏页时可从 doublewrite buffer files 进行页恢复，保证页的完整和数据的正确。
+
+  
+
+#### 重建表空间
 
 ```
 alter table t engine=InnoDB
@@ -197,7 +209,11 @@ alter table t engine=InnoDB
 
 begin/start transaction 命令并不是一个事务的起点，在执行到它们之后的第一个操作 InnoDB 表的语句，事务才真正启动。如果你想要马上启动一个事务，可以使用 start transaction with consistent snapshot 这个命令
 
-**Buffer Pool**
+oder by
 
-[**InnoDB 的 Buffer Pool**](https://www.yuque.com/fcant/sql/gqngg9)
+https://blog.csdn.net/weixin_52821814/article/details/131741829
+
+
+
+
 
