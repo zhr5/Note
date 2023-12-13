@@ -215,5 +215,22 @@ https://blog.csdn.net/weixin_52821814/article/details/131741829
 
 
 
+# 实践篇
+
+## order by
+
+![image-20231212111556538](images/MySQL实战45讲/image-20231212111556538.png)
 
 
+
+- 全字段排序
+
+- rowID排序
+
+- 联合索引
+
+- 覆盖索引
+
+### 外部排序
+
+https://blog.csdn.net/weixin_52821814/article/details/131741829
