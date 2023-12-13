@@ -234,3 +234,35 @@ https://blog.csdn.net/weixin_52821814/article/details/131741829
 ### 外部排序
 
 https://blog.csdn.net/weixin_52821814/article/details/131741829
+
+![image-20231213194059308](images/MySQL实战45讲/image-20231213194059308.png)
+
+## 统计更新
+
+在MySQL中，表的统计信息有很多种，比如表行数、平均行长度、索引状态等。这些统计信息可以通过一系列命令进行更新。其中，最常用的是ANALYZE TABLE、OPTIMIZE TABLE和CHECK TABLE。
+
+ANALYZE TABLE会分析表的内容并更新表的统计信息。它适用于静态表以及更新频率较低的表。
+
+```
+ANALYZE TABLE table_name;
+```
+
+OPTIMIZE TABLE则会对表进行优化，删除表中未使用的空间并排列数据以加快查询速度。同时，它也会更新表的统计信息。OPTIMIZE TABLE适用于更新频率较高的表。
+
+```
+OPTIMIZE TABLE table_name;
+```
+
+CHECK TABLE主要用于检查表的完整性。当MySQL出现异常，表被损坏或出现错误时，可以使用CHECK TABLE来修复表。同时，CHECK TABLE也会更新表的统计信息。
+
+```
+CHECK TABLE table_name;
+```
+
+除了这些命令，MySQL还提供了其他命令来更新表的统计信息。例如，FLUSH TABLES会关闭表并释放底层的缓存，这会导致表的统计信息被重新计算。
+
+```
+FLUSH TABLES table_name;
+```
+
+总而言之，更新MySQL表的统计信息非常有用，可以帮助我们更好地管理和维护MySQL数据库。通过本文介绍的命令，可以轻松更新表的统计信息，提高数据库性能。
