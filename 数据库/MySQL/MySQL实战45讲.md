@@ -169,6 +169,30 @@ MDL写锁：当我们对表结构进行修改的时候会加MDL写锁。
 应用场景
 在我看来，SELECT ... LOCK IN SHARE MODE的应用场景适合于两张表存在关系时的写操作，拿mysql官方文档的例子来说，一个表是child表，一个是parent表，假设child表的某一列child_id映射到parent表的c_child_id列，那么从业务角度讲，此时我直接insert一条child_id=100记录到child表是存在风险的，因为刚insert的时候可能在parent表里删除了这条c_child_id=100的记录，那么业务数据就存在不一致的风险。正确的方法是再插入时执行select * from parent where c_child_id=100 lock in share mode,锁定了parent表的这条记录，然后执行insert into child(child_id) values (100)就ok了。
 
+### 间隙锁（Gap Lock）---可重复读的隔离级别才有
+
+大家都用读提交，可是逻辑备份的时候，mysqldump 为什么要把备份线程设置成可重复读呢？
+
+- 不加锁的情况下，备份系统备份的得到的库不是一个逻辑时间点，这个视图是逻辑不一致的。说到视图你肯定想起来了，我们在前面讲事务隔离的时候，其实是有一个方法能够拿到一致性视图的，对吧？是的，就是在可重复读隔离级别下开启一个事务。
+
+### 间隙锁和行锁合称 (next-key lock)
+
+next-key lock 是前开后闭区间
+
+间隙锁死锁
+
+![img](images/MySQL实战45讲/df37bf0bb9f85ea59f0540e24eb6bcbe.png)
+
+session A 执行 select … for update 语句，由于 id=9 这一行并不存在，因此会加上间隙锁 (5,10);
+
+session B 执行 select … for update 语句，同样会加上间隙锁 (5,10)，间隙锁之间不会冲突，因此这个语句可以执行成功；
+
+session B 试图插入一行 (9,9,9)，被 session A 的间隙锁挡住了，只好进入等待；
+
+session A 试图插入一行 (9,9,9)，被 session B 的间隙锁挡住了。
+
+
+
 ## 页
 
 ![image-20231204123721695](images/MySQL实战45讲/image-20231204123721695.png)
@@ -278,6 +302,10 @@ FLUSH TABLES table_name;
 
 ![image-20231214190838741](images/MySQL实战45讲/image-20231214190838741.png)
 
-# 幻读
+## 幻读
 
 ![image-20231219165243098](images/MySQL实战45讲/image-20231219165243098.png)
+
+## 加锁案例
+
+![image-20231220193511765](images/MySQL实战45讲/image-20231220193511765.png)
