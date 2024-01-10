@@ -851,10 +851,226 @@ void backtracking(参数) {
 #### [46. 全排列](https://leetcode.cn/problems/permutations/)
 
 
+
+#### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
+
+```Java
+class Solution {
+
+    List<List<String>> res = new ArrayList<>();
+
+    public List<List<String>> solveNQueens(int n) {
+        
+        char[][] chess = new char[n][n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                chess[i][j] = '.';
+        dfs(res,chess,0);
+
+        return res;        
+    }
+
+    public void dfs(List<List<String>> res , char[][] chess ,int row){
+
+        if(row==chess.length) {
+            res.add(construct(chess));
+            return;
+        }
+        for(int col=0;col<chess.length;col++){
+           if (valid(chess, row, col)) {
+               chess[row][col]='Q';
+               dfs(res,chess,row+1);
+               chess[row][col]='.';
+           }
+        }
+    }
+
+    public boolean valid(char[][] chess,int row,int col){
+        
+        //判断当前列有没有皇后,因为他是一行一行往下走的，
+        //我们只需要检查走过的行数即可，通俗一点就是判断当前
+        //坐标位置的上面有没有皇后
+        for (int i = 0; i < row; i++) {
+            if (chess[i][col] == 'Q') {
+                return false;
+            }
+        }
+
+         //判断当前坐标的右上角有没有皇后
+        for (int i = row - 1, j = col + 1; i >= 0 && j < chess.length; i--, j++) {
+            if (chess[i][j] == 'Q') {
+                return false;
+            }
+        }
+        //判断当前坐标的左上角有没有皇后
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if (chess[i][j] == 'Q') {
+                return false;
+            }
+        }
+        return true;
+
+    }
+    //把数组转为list
+    public List<String> construct(char[][] chess){
+        List<String> path = new ArrayList<>();
+        for (int i = 0; i < chess.length; i++) {
+            path.add(new String(chess[i]));
+        }
+        return path;
+    }
+}
+```
+
+
+
 ## 滑动窗口
 
+#### [3. 无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set=new HashSet<>();//存储从l到r的子串字符
+        int l=0,r=0,res=0;
+        while(l<s.length()){
+            if(res>s.length()-l-1)
+                break;//提前结束
+
+            while(r<s.length()&&!set.contains(s.charAt(r))){
+                set.add(s.charAt(r));
+                r++;
+            }
+            res=Math.max(res,r-l);
+            while(r<s.length()&&set.contains(s.charAt(r))){//
+                set.remove(s.charAt(l));
+                l++;
+            }
+
+        }
+
+        return res;
+    }
+}
+```
+
+#### [438. 找到字符串中所有字母异位词](https://leetcode.cn/problems/find-all-anagrams-in-a-string/)
+
+```java
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        int sLen = s.length(), pLen = p.length();
+
+        if (sLen < pLen) {
+            return new ArrayList<Integer>();
+        }
+
+        List<Integer> ans = new ArrayList<Integer>();
+         //建立两个数组存放字符串中字母出现的词频，并以此作为标准比较
+        int[] sCount = new int[26];
+        int[] pCount = new int[26];
+         //当滑动窗口的首位在s[0]处时 （相当于放置滑动窗口进入数组）
+        for (int i = 0; i < pLen; ++i) {
+            ++sCount[s.charAt(i) - 'a'];//记录s中前pLen个字母的词频
+            ++pCount[p.charAt(i) - 'a'];//记录要寻找的字符串中每个字母的词频(只用进行一次来确定)
+        }
+        //判断放置处是否有异位词     (在放置时只需判断一次)
+        if (Arrays.equals(sCount, pCount)) {
+            ans.add(0);
+        }
+        //开始让窗口进行滑动
+        for (int i = 0; i < sLen - pLen; ++i) {//i是滑动前的首位
+            --sCount[s.charAt(i) - 'a'];//将滑动前首位的词频删去
+            ++sCount[s.charAt(i + pLen) - 'a'];//增加滑动后最后一位的词频（以此达到滑动的效果）
+            //判断滑动后处，是否有异位词
+            if (Arrays.equals(sCount, pCount)) {
+                ans.add(i + 1);
+            }
+        }
+
+        return ans;
+
+    }
+}
+```
 
 
+
+## 动态规划
+
+#### [746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
+
+```java
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        //定义d[i]是从楼梯第 i 个台阶向上爬需要支付的总最小费用
+        int [] dp=new int[cost.length];
+        dp[0]=cost[0];
+        dp[1]=cost[1];
+        for(int i=2;i<cost.length;i++){
+            dp[i]=Math.min(dp[i-1],dp[i-2])+cost[i];
+        }
+        return Math.min(dp[cost.length - 1], dp[cost.length - 2]);
+    }
+}
+```
+
+#### [62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+         int [] [] dp=new int [m][n];//表示机器人到dp[i][j]共存在的路径数  【可优化成一维】
+         //表示机器人到dp[i][j]共存在的路径数
+         //dp[i][j]=dp[i-1][j]+dp[i][j-1]
+         for(int j=0;j<n;j++){
+             dp[0][j]=1;
+         }  
+         for(int i=0;i<m;i++){
+             dp[i][0]=1;
+         }
+         for(int i=1;i<m;i++){
+             for(int j=1;j<n;j++){
+                 dp[i][j]=dp[i-1][j]+dp[i][j-1];
+             }
+         }
+         return dp[m-1][n-1];
+    }
+}
+```
+
+
+
+## 图论
+
+#### [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+
+```java
+class Solution {
+    public int numIslands(char[][] grid) {
+        int count=0;
+        int m=grid.length,n=grid[0].length;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == '1'){
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    public void dfs(char[][] grid,int i,int j){
+       if(i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0') return;
+        grid[i][j] = '0';//访问过的标记 防止回去
+        dfs(grid, i + 1, j);
+        dfs(grid, i, j + 1);
+        dfs(grid, i - 1, j);
+        dfs(grid, i, j - 1);
+    }
+
+}
+```
 
 
 
