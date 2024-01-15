@@ -1064,6 +1064,103 @@ class Solution {
 }
 ```
 
+#### [343. 整数拆分](https://leetcode.cn/problems/integer-break/)
+
+```java
+class Solution {
+    public int integerBreak(int n) {
+        int [] dp = new int [n+1];
+        //dp[i] 表示 i拆分后最大乘积 dp[i]=max(dp[i], max((i - j) * j, dp[i - j] * j))
+        dp[2]=1;
+        for(int i=3 ; i<=n;i++){
+            for(int j=1 ;j<=i - 1 ;j++){
+                dp[i]=Math.max(dp[i], j* Math.max(dp [i-j] ,(i-j)));
+            }
+        } 
+        return dp[n];
+    }
+} 
+```
+
+#### [96. 不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/)
+
+**n=1**
+
+```mermaid
+graph TB;
+1((1))-->2((nil))
+1((1))-->3((nil))
+```
+
+**n=2**
+
+``` mermaid
+graph TB;
+1((2))-->2((1))
+1((2))-->3((nil))
+
+4((2))-->5((1))
+4((2))-->6((nil))
+```
+**n=3**
+
+``` mermaid
+graph TB;
+1((1))-->2((nil))	
+1((1))-->3((2))
+3((2))-->4((nil))
+3((2))-->5((3))
+
+6((1))-->7((nil))	
+6((1))-->8((3))
+8((3))-->9((2))
+8((3))-->10((nil))
+
+
+11((2))-->12((1))
+11((2))-->13((3))
+
+
+14((3))-->15((2))
+14((3))-->16((nil))
+15((2))-->17((1))
+15((2))-->18((nil))
+
+19((3))-->20((1))
+19((3))-->21((nil))
+20((1))-->22((nil))
+20((1))-->23((2))
+
+```
+
+
+
+$$
+dp[i] += dp[j - 1] * dp[i - j]
+$$
+j-1 为j为头结点左子树节点数量，i-j 为以j为头结点右子树节点数量
+
+```java
+class Solution {
+    //通过 n= 1,2,3 并画图推导出规律
+    //dp[i]表示n个节点互不相同的二叉搜索树的个数
+    //dp[i] += dp[j - 1] * dp[i - j]; ，j-1 为j为头结点左子树节点数量，i-j 为以j为头结点右子树节点数量
+    public int numTrees(int n) {
+        int [] dp=new int [n+1];
+        dp[0]=1;
+        dp[1]=1;
+        for(int i=2;i<=n;i++){
+            for(int j=1;j<=i;j++){
+                dp[i]+=dp[j-1]*dp[i-j];
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+
+
 
 
 ## 图论
