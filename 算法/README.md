@@ -322,7 +322,7 @@ class Solution {
                 intervals[i][1]=Math.max(intervals[i][1], intervals[i - 1][1]);
             }
         }
-        res.add(new int[]{start, intervals[intervals.length - 1][1]});
+        res.add(new int[]{start, intervals[intervals.length - 1][1]});//最后的区间加上
         return res.toArray(new int[res.size()][]);
     }
 }
