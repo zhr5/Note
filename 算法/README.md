@@ -303,6 +303,33 @@ class Solution {
 
 
 
+
+
+#### [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+```java
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        List<int[]> res = new LinkedList<>();
+        //按起点排序
+        Arrays.sort(intervals, (o1, o2) -> Integer.compare(o1[0], o2[0]));
+        int start=intervals[0][0];
+        for(int i=1;i<intervals.length;i++){
+            if(intervals[i-1][1]<intervals[i][0]){//当第二个的0大于第一个的1盖棺定论第一个区间可以添加到答案集合里(也就是不重叠)
+                res.add(new int[]{start,intervals[i-1][1]});
+                start=intervals[i][0];//重置起点为第二个的0
+            }else{//重叠的情况,把后者的1改为两者的max，同时有重叠暂时不加入结果集，等后面分割开再加进去
+                intervals[i][1]=Math.max(intervals[i][1], intervals[i - 1][1]);
+            }
+        }
+        res.add(new int[]{start, intervals[intervals.length - 1][1]});
+        return res.toArray(new int[res.size()][]);
+    }
+}
+```
+
+
+
 ## 链表
 
 #### [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
