@@ -352,9 +352,145 @@ class Solution {
 }
 ```
 
+### 矩阵
+
+#### [73. 矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/)
+
+##### 方法一
+
+```java
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m=matrix.length,n=matrix[0].length;
+        boolean [] row=new boolean [m];
+        boolean [] column=new boolean [n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]==0){
+                    row[i]=true;
+                    column[j]=true;
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                
+                   if(row[i]||column[j]){
+                       matrix[i][j]=0;
+                   }
+               
+            }
+        }
+    }
+}
+```
+
+##### 方法二
+
+我们可以用矩阵的第一行和第一列代替方法一中的两个标记数组，以达到 O(1) 的额外空间。但这样会导致原数组的第一行和第一列被修改，无法记录它们是否原本包含 0。因此我们需要额外使用两个标记变量分别记录第一行和第一列是否原本包含 0。
+
+在实际代码中，我们首先预处理出两个标记变量，接着使用其他行与列去处理第一行与第一列，然后反过来使用第一行与第一列去更新其他行与列，最后使用两个标记变量更新第一行与第一列即可。
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/set-matrix-zeroes/solutions/669901/ju-zhen-zhi-ling-by-leetcode-solution-9ll7/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+```java
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m=matrix.length,n=matrix[0].length;
+        boolean  flagrow0=false;
+        boolean  flagcolumn0=false;
+        for(int i=0;i<m;i++){//第一列
+            if(matrix[i][0]==0){
+                flagcolumn0=true;
+                break;
+            }
+        }
+         for(int j=0;j<n;j++){//第一行
+             if(matrix[0][j]==0){
+                flagrow0=true;
+                break;
+            }
+         }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                if(matrix[i][j]==0){
+                    matrix[i][0]=0;
+                    matrix[0][j]=0;
+                }
+            }
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){               
+                   if( matrix[i][0]==0||matrix[0][j]==0){
+                       //如果第一行第一列是后面matrix[i][j]被动影响的只是重复给matrix[i][j]=0赋值了一次而已，如果第一行第一列确实有0则正好需要将matrix[i][j]赋值为0
+                       matrix[i][j]=0;
+                   }              
+            }
+        }
+        
+        if(flagrow0){
+            for(int j=0;j<n;j++){
+                matrix[0][j]=0;
+            }
+        }
+         if(flagcolumn0){
+            for(int i=0;i<m;i++){
+                matrix[i][0]=0;
+            }
+        }
+
+    }
+}
+```
 
 
-## 链表
+
+##### 方法三
+
+**使用一个标记变量**
+
+我们可以对方法二进一步优化，只使用一个标记变量记录第一列是否原本存在0。这样，第一列的第一个元素即可以标记第一行是否出现 0。但为了防止每一列的第一个元素被提前更新，我们需要从最后一行开始，倒序地处理矩阵元素。
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/set-matrix-zeroes/solutions/669901/ju-zhen-zhi-ling-by-leetcode-solution-9ll7/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+```java
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length;
+        boolean flagCol0 = false;
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                flagCol0 = true;
+            }
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = matrix[0][j] = 0;
+                }
+            }
+        }
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+            if (flagCol0) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
+```
+
+ 
+
+##   链表
 
 #### [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
 
