@@ -476,11 +476,11 @@ class Solution {
         }
         for (int i = m - 1; i >= 0; i--) {
             for (int j = 1; j < n; j++) {
-                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {//matrix[0][0]现在存了flagRow0也就是第一行是否有0，所以需要最后遍历第一行
                     matrix[i][j] = 0;
                 }
             }
-            if (flagCol0) {
+            if (flagCol0) {//通过标志刷新第一列
                 matrix[i][0] = 0;
             }
         }
@@ -488,7 +488,50 @@ class Solution {
 }
 ```
 
- 
+#### [54. 螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
+
+通过**count**记录是否结束，定义四个变量 **left** **right**  **top** **botten**代表左右上下边界  然后**从左到右 ** **从上到下**  **从右到左** **从下到上** 遍历 不断调整边界
+
+```java
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res=new ArrayList<>();
+        int m=matrix[0].length,n=matrix.length;
+        int l=0,r=m-1,t=0,b=n-1;
+        int count=0;
+        while(count<m*n){
+            //从左到右
+            for(int i=l;i<=r&&count<m*n;i++){
+                res.add(matrix[t][i]);
+                count++;
+            }
+            t++;
+            //从上到下
+            for(int i=t;i<=b&&count<m*n;i++){
+                res.add(matrix[i][r]);
+                count++;
+            }
+            r--;
+            //从右到左
+            for(int i=r;i>=l&&count<m*n;i--){
+                res.add(matrix[b][i]);
+                count++;
+            }
+            b--;
+            //从下到上
+            for(int i=b;i>=t&&count<m*n;i--){
+                res.add(matrix[i][l]);
+                count++;
+            }
+            l++;
+        }
+
+        return res;
+    }
+}
+```
+
+
 
 ##   链表
 
