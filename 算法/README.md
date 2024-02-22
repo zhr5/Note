@@ -53,7 +53,9 @@
 
 ## 数组
 
-### 二分查找
+### 二分查找 
+
+
 
 #### [704. 二分查找](https://leetcode.cn/problems/binary-search/)
 
@@ -264,6 +266,46 @@ class Solution {
     }
 }
 ```
+
+#### [153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/)
+
+```java
+class Solution {
+public  int findMin(int[] nums) {
+        int len = nums.length;
+        int low = 0;
+        int high = len-1;
+
+//        二分查找
+        while(low < high){
+//            取中间值
+            int mid = (high+low)/2;
+//            如果中间值小于最大值，则最大值减小
+//            疑问：为什么 high = mid;而不是 high = mid-1;
+//            解答：{4,5,1,2,3}，如果high=mid-1，则丢失了最小值1
+            if (nums[mid] < nums[high]) {
+                high = mid;
+            } else {
+//                如果中间值大于最大值，则最小值变大
+//                疑问：为什么 low = mid+1;而不是 low = mid;
+//                解答：{4,5,6,1,2,3}，nums[mid]=6，low=mid+1,刚好nums[low]=1
+//                继续疑问：上边的解释太牵强了，难道没有可能low=mid+1,正好错过了最小值
+//                继续解答：不会错过!!! 如果nums[mid]是最小值的话，则其一定小于nums[high],走if，就不会走else了
+                low = mid+1;
+            }
+        }
+//        疑问：为什么while的条件是low<high,而不是low<=high呢
+//        解答：low<high，假如最后循环到{*,10,1,*}的这种情况时，nums[low]=10,nums[high]=1,nums[mid]=10,low=mid+1,
+//             直接可以跳出循环了,所以low<high,此时low指向的就是最小值的下标;
+//             如果low<=high的话，low=high，还会再不必要的循环一次，此时最后一次循环的时候会发生low==high==mid，
+//             则nums[mid]==nums[high]，则会走一次else语句，则low=mid+1,此时low指向的是最小值的下一个下标，
+//             则需要return[low-1]
+        return nums[low];
+    }
+}
+```
+
+
 
 ### 移除元素
 
@@ -531,6 +573,53 @@ class Solution {
 }
 ```
 
+#### [240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
+```java
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m=matrix.length,n=matrix[0].length;
+        int i=m-1,j=0;
+        while(i>=0&&j<n){
+            if(target==matrix[i][j]){
+                return true;
+            }else if(target>matrix[i][j]){
+                j++;
+            }else{
+                i--;
+            }
+        }
+        return false;
+    }
+}
+```
+
+#### [48. 旋转图像](https://leetcode.cn/problems/rotate-image/)
+
+##### 方法一：
+
+复制一个矩阵，通过旋转填充
+
+方法二：原地修改
+
+```java
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n / 2; i++) {
+            for (int j = 0; j < (n + 1) / 2; j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[n - 1 - j][i];
+                matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j];
+                matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
+                matrix[j][n - 1 - i] = tmp;
+            }
+        }
+    }
+}
+
+```
+
 
 
 ##   链表
@@ -627,7 +716,83 @@ class Solution {
 }
 ```
 
+#### [160. 相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/)
 
+```java
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if(headA==null||headB==null){
+            return null;
+        }
+        ListNode pa = headA , pb = headB;
+
+        while(pa!=pb){
+            pa = pa == null ? headB : pa.next;
+            pb = pb == null ? headA : pb.next;
+        }
+
+        return pa;
+    }
+}
+```
+
+#### [141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/)
+
+```java
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode f=head.next,s=head;
+        while(f!=s){
+            if(f==null||f.next==null) return false;
+            f=f.next.next;
+            s=s.next;
+        }
+        return true;
+    }
+}
+```
+
+#### [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
+
+假设单链长度a,环链长度b。定义快慢指针f、s 。
+
+第一次相遇 f-s=nb ，f=2s  得出 s=nb，  又当跑过a+nb长刚好到达环链起点，则把f指向头节点，当f前进a步正好和s在环链起点相遇
+
+```java
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode f=head.next,s=head;
+        while(f!=s){
+            if(f==null||f.next==null) return false;
+            f=f.next.next;
+            s=s.next;
+        }
+        return true;
+    }
+}
+```
+
+#### [234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
+
+##### 方法一：
+
+复制一个链表判断，时间复杂度O（n)  ，空间复杂度O（n)
+
+##### 方法二：
+
+递归  时间复杂度O（n)  ，空间复杂度O（n)
+
+##### 方法三
+
+反转一半链表后用双指针判断
+
+时间复杂度O（n)  ，空间复杂度O（1)
 
 ## 哈希表
 
@@ -1056,46 +1221,6 @@ class Solution {
     }
 }
 ```
-## 二分查找
-
-#### [153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/)
-
-```java
-class Solution {
-public  int findMin(int[] nums) {
-        int len = nums.length;
-        int low = 0;
-        int high = len-1;
-
-//        二分查找
-        while(low < high){
-//            取中间值
-            int mid = (high+low)/2;
-//            如果中间值小于最大值，则最大值减小
-//            疑问：为什么 high = mid;而不是 high = mid-1;
-//            解答：{4,5,1,2,3}，如果high=mid-1，则丢失了最小值1
-            if (nums[mid] < nums[high]) {
-                high = mid;
-            } else {
-//                如果中间值大于最大值，则最小值变大
-//                疑问：为什么 low = mid+1;而不是 low = mid;
-//                解答：{4,5,6,1,2,3}，nums[mid]=6，low=mid+1,刚好nums[low]=1
-//                继续疑问：上边的解释太牵强了，难道没有可能low=mid+1,正好错过了最小值
-//                继续解答：不会错过!!! 如果nums[mid]是最小值的话，则其一定小于nums[high],走if，就不会走else了
-                low = mid+1;
-            }
-        }
-//        疑问：为什么while的条件是low<high,而不是low<=high呢
-//        解答：low<high，假如最后循环到{*,10,1,*}的这种情况时，nums[low]=10,nums[high]=1,nums[mid]=10,low=mid+1,
-//             直接可以跳出循环了,所以low<high,此时low指向的就是最小值的下标;
-//             如果low<=high的话，low=high，还会再不必要的循环一次，此时最后一次循环的时候会发生low==high==mid，
-//             则nums[mid]==nums[high]，则会走一次else语句，则low=mid+1,此时low指向的是最小值的下一个下标，
-//             则需要return[low-1]
-        return nums[low];
-    }
-}
-```
-
 
 
 ## 回溯
