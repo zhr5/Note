@@ -820,6 +820,45 @@ public class Solution {
 
 时间复杂度O（n)  ，空间复杂度O（1)
 
+#### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+
+**解析**
+
+数字已经是逆置的了，所以只需要保存进位即可，最后进位大于0需要多一个节点--对于类似（5+7=12）多了一位。
+
+```java
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head=null,tail=null;
+        int carry=0;
+        while(l1!=null||l2!=null){
+            int n1 = l1 ==  null? 0:l1.val;
+            int n2 = l2 ==  null? 0:l2.val;
+
+            int sum = n1+n2+carry;
+            carry = sum /10;
+            if(head==null) head = tail = new ListNode(sum%10);
+            else{
+                tail.next = new ListNode(sum%10);
+                tail = tail.next;
+            }
+
+            if(l1!=null) l1 = l1.next;
+            if(l2!=null) l2 = l2.next;
+        }
+
+        if(carry>0) tail.next = new ListNode(carry);
+
+        return head; 
+
+    }
+}
+```
+
+
+
+
+
 ## 哈希表
 
 #### [1. 两数之和](https://leetcode.cn/problems/two-sum/)
