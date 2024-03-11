@@ -41,7 +41,7 @@
 ![](img/mq-2.png)
 
 ## 1.2 MQ的优点和缺点
-
+  
 优点：解耦、削峰、数据分发
 
 缺点包含以下几点：
@@ -714,9 +714,9 @@ tail -500f ~/logs/rocketmqlogs/broker.log
 
 进入RocketMQ安装位置，在bin目录下执行```./mqadmin {command} {args}``` 
 
-###3.4.2 命令介绍
+### 3.4.2 命令介绍
 
-####1）Topic相关
+#### 1）Topic相关
 
 <table border=0 cellpadding=0 cellspacing=0 width=714>
  <col width=177>
@@ -950,8 +950,7 @@ tail -500f ~/logs/rocketmqlogs/broker.log
   <td class=xl66 width=159 style='width:119pt'>指定topic</td>
  </tr>
 </table>
-
-####2）集群相关
+#### 2）集群相关
 
 <table border=0 cellpadding=0 cellspacing=0 width=714>
  <col width=177>
@@ -1024,8 +1023,7 @@ tail -500f ~/logs/rocketmqlogs/broker.log
   <td class=xl66 width=185 style='width:139pt'>NameServer 服务地址，格式 ip:port</td>
  </tr>
 </table>
-
-####3）Broker相关
+#### 3）Broker相关
 
 <table border=0 cellpadding=0 cellspacing=0 width=714>
  <col width=177>
@@ -1205,8 +1203,7 @@ tail -500f ~/logs/rocketmqlogs/broker.log
   <td class=xl68 width=87 style='width:65pt'>发送次数</td>
  </tr>
 </table>
-
-####4）消息相关
+#### 4）消息相关
 
 <table border=0 cellpadding=0 cellspacing=0 width=714>
  <col width=177>
@@ -2389,7 +2386,7 @@ public class ScheduledMessageProducer {
 }
 ```
 
-###4.3.3 验证
+### 4.3.3 验证
 
 您将会看到消息的消费比存储时间晚10秒
 
@@ -2571,7 +2568,7 @@ consumer.start();
 
 ## 4.6 事务消息
 
-###4.6.1 流程分析
+### 4.6.1 流程分析
 
 ![](img/事务消息.png)
 
@@ -2579,7 +2576,7 @@ consumer.start();
 
 上图说明了事务消息的大致方案，其中分为两个流程：正常事务消息的发送及提交、事务消息的补偿流程。
 
-####1）事务消息发送及提交
+#### 1）事务消息发送及提交
 
 (1) 发送消息（half消息）。
 
@@ -2607,7 +2604,7 @@ consumer.start();
 * TransactionStatus.RollbackTransaction: 回滚事务，它代表该消息将被删除，不允许被消费。
 * TransactionStatus.Unknown: 中间状态，它代表需要检查消息队列来确定状态。
 
-###4.6.1 发送事务消息
+### 4.6.2 发送事务消息
 
 #### 1) 创建事务性生产者
 
