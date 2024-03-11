@@ -54,7 +54,9 @@ Linux操作系统分为【用户态】和【内核态】，文件操作、网络
 3. 然后从用户态 内存复制到网络驱动的内核态内存；
 4. 最后是从网络驱动的内核态内存复 制到网卡中进行传输。
 
-![](img/文件操作和网络操作.png)通过使用mmap的方式，可以省去向用户态的内存复制，提高速度。这种机制在Java中是通过MappedByteBuffer实现的
+![](img/文件操作和网络操作.png)
+
+通过使用mmap的方式，可以省去向用户态的内存复制，提高速度。这种机制在Java中是通过MappedByteBuffer实现的
 
 RocketMQ充分利用了上述特性，也就是所谓的“零拷贝”技术，提高消息存盘和网络发送的速度。
 
@@ -2276,7 +2278,7 @@ handleHA(result, putMessageResult, msg);
 
 ### 2.4.3 存储文件
 
-![](../%E6%96%87%E6%A1%A3/img/%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6.png)
+![](img/%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6.png)
 
 - commitLog：消息存储目录
 - config：运行期间一些配置信息
@@ -2289,7 +2291,7 @@ handleHA(result, putMessageResult, msg);
 
 RocketMQ通过使用内存映射文件提高IO访问性能，无论是CommitLog、ConsumerQueue还是IndexFile，单个文件都被设计为固定长度，如果一个文件写满以后再创建一个新文件，文件名就为该文件第一条消息对应的全局物理偏移量。
 
-####1）MappedFileQueue
+#### 1）MappedFileQueue
 
 ![](img/MappedFileQueue.png)
 
@@ -2414,7 +2416,7 @@ public long getMaxWrotePosition() {
 }
 ```
 
-####2）MappedFile
+#### 2）MappedFile
 
 ![](img/MappedFile.png)
 
@@ -2895,7 +2897,7 @@ public void buildIndex(DispatchRequest req) {
 
 ![](img/文件恢复总体流程.png)
 
-####1）存储文件加载
+#### 1）存储文件加载
 
 ***代码：DefaultMessageStore#load***
 
@@ -3109,7 +3111,7 @@ public void recoverTopicQueueTable() {
 }
 ```
 
-####2）正常恢复
+#### 2）正常恢复
 
 ***代码：CommitLog#recoverNormally***
 
@@ -3845,7 +3847,7 @@ public List<MessageExt> takeMessags(final int batchSize)
 
 #### 3）消息拉取基本流程
 
-#####1.客户端发起拉取请求
+##### 1.客户端发起拉取请求
 
 ![](img/消息拉取基本流程.png)
 
@@ -3925,7 +3927,7 @@ public void pullMessage(final PullRequest pullRequest) {
 }
 ```
 
-#####2.消息服务端Broker组装消息
+##### 2.消息服务端Broker组装消息
 
 ![](img/消息服务端Broker组装消息.png)
 
@@ -4073,7 +4075,7 @@ if (storeOffsetEnable) {
 }
 ```
 
-#####3.消息拉取客户端处理消息
+#####  3.消息拉取客户端处理消息
 
 ![](img/消息拉取客户端处理消息.png)
 
