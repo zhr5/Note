@@ -863,6 +863,8 @@ class Solution {
 
 #### [1. 两数之和](https://leetcode.cn/problems/two-sum/)
 
+利用哈希表存储<**nums[i]**,**i**>的关系，后面查找**target-nums[i]**就可以直接使用
+
 ```java
 class Solution {
     public int[] twoSum(int[] nums, int target) {
@@ -880,6 +882,8 @@ class Solution {
 
 #### [49. 字母异位词分组](https://leetcode.cn/problems/group-anagrams/)
 
+**字母异位词** 是由重新排列源单词的所有字母得到的一个新单词，所以可以将字母排序后作为key，value为所有字母异位词
+
 ```java
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
@@ -888,7 +892,7 @@ class Solution {
             char [] array=str.toCharArray();
             Arrays.sort(array);
             String key=new String(array);
-            List<String> list = mp.getOrDefault(key, new ArrayList<String>());
+            List<String> list = mp.getOrDefault(key, new ArrayList<String>());//已存在则返回当前value，否则new一个
             list.add(str);
             mp.put(key,list);
         }
@@ -899,6 +903,8 @@ class Solution {
 
 #### [128. 最长连续序列](https://leetcode.cn/problems/longest-consecutive-sequence/)
 
+用set存储，然后不断从set中取连续的数开始计数，取最大值（不要求连续的大多用set）
+
 ```java
 class Solution {
     public int longestConsecutive(int[] nums) {
@@ -908,14 +914,14 @@ class Solution {
             st.add(nums[i]);
         }
         for(int i=0;i<nums.length;i++){
-            if(!st.contains(nums[i]-1)){//增加跳过的逻辑  可从O(n^2)优化到O(n) 保证每个数字只走一次while即只为增长序列的起始位置才开始算
-            int a=nums[i];
-            int t=1;
-            while(st.contains(a+1)){
-                t++;
-                a++;
-            }
-            if(t>max) max=t;
+            if(!st.contains(nums[i]-1)){//增加的跳过逻辑  可从O(n^2)优化到O(n) 保证每个数字只走一次while即只为增长序列的起始位置才开始算
+            	int a=nums[i];
+            	int t=1;
+            	while(st.contains(a+1)){
+                	t++;
+                	a++;
+            	}
+            	if(t>max) max=t;
             }
         }
         return max;
@@ -963,6 +969,8 @@ class Solution {
 
 #### [15. 三数之和](https://leetcode.cn/problems/3sum/)
 
+排序＋哈希表
+
 ```java
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
@@ -1001,6 +1009,8 @@ class Solution {
 
 
 #### [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
+
+按列计算，用哈希表计算每一列水柱最高
 
 ```java
 class Solution {
@@ -1722,6 +1732,12 @@ class Solution {
 
 }
 ```
+
+
+
+
+
+
 
 
 
