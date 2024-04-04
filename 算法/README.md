@@ -857,6 +857,104 @@ class Solution {
 
 
 
+#### [24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+1.递归
+
+```java
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if(head==null||head.next==null) return head;
+        ListNode newHead = head.next;
+        head.next = swapPairs(newHead.next);
+        newHead.next = head;
+        return newHead;
+    }
+}
+```
+
+2.迭代
+
+构建一个临时节点用来存储每两个节点的前置节点，tmp->node1->node2
+
+则进行交换后      tmp->node2->node1,然后tmp=node1；
+
+
+
+```java
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode preHead=new ListNode();
+        preHead.next=head;
+        ListNode tmp=preHead;
+        while(tmp.next!=null&&tmp.next.next!=null){
+            ListNode p1=preHead.next;
+            ListNode p2=preHead.next.next;
+            tmp.next=p2;
+            p1.next=p2.next;
+            p2.next=p1;
+            tmp=p1;
+
+        }
+        return preHead.next;
+    }
+}
+```
+
+#### [138. 随机链表的复制](https://leetcode.cn/problems/copy-list-with-random-pointer/)
+
+哈希表存储构建 **原链表节点** 和 **新链表对应节点** 的键值对映射关系
+
+```java
+class Solution {
+    public Node copyRandomList(Node head) {
+         if(head == null) return null;
+        Node cur = head;
+        Map<Node, Node> map = new HashMap<>();
+        // 3. 复制各节点，并建立 “原节点 -> 新节点” 的 Map 映射
+        while(cur != null) {
+            map.put(cur, new Node(cur.val));
+            cur = cur.next;
+        }
+        cur = head;
+        // 4. 构建新链表的 next 和 random 指向
+        while(cur != null) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        // 5. 返回新链表的头节点
+        return map.get(head);
+
+    }
+}
+```
+
+#### [108. 将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
+
+```java
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+         return helper(nums, 0, nums.length - 1);
+    }
+
+    public TreeNode helper(int[] nums, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+
+        // 总是选择中间位置左边的数字作为根节点
+        int mid = (left + right) / 2;
+
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = helper(nums, left, mid - 1);
+        root.right = helper(nums, mid + 1, right);
+        return root;
+
+    }
+}
+```
+
 
 
 ## 哈希表
