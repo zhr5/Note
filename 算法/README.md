@@ -2188,6 +2188,58 @@ class Solution {
 
 单调队列
 
+#### [279. 完全平方数](https://leetcode.cn/problems/perfect-squares/)
+
+方法一：动态规划
+思路及算法
+
+我们可以依据题目的要求写出状态表达式：**f[i]**表示最少需要多少个数的平方来表示整数 **i**。
+
+这些数必然落在区间 
+$$
+[1,\sqrt{n}]
+$$
+我们可以枚举这些数，假设当前枚举到**j**，那么我们还需要取若干数的平方，构成 
+$$
+i-j^2
+$$
+此时我们发现该子问题和原问题类似，只是规模变小了。这符合了动态规划的要求，于是我们可以写出状态转移方程。
+$$
+f[i]=1+j=min\int^\sqrt{i}_{j=1}f(i-j^2)
+$$
+其中 **f[0]=0** 为边界条件，实际上我们无法表示数字 0，只是为了保证状态转移过程中遇到 **j**恰为 i\sqrt{i} 的情况合法。
+
+同时因为计算 **f[i]** 时所需要用到的状态仅有
+$$
+f[i−j^2]
+$$
+必然小于i，因此我们只需要从小到大地枚举 iii 来计算 f[i] 即可。
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/perfect-squares/solutions/822940/wan-quan-ping-fang-shu-by-leetcode-solut-t99c/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+```java
+class Solution {
+    public int numSquares(int n) {
+         int[] f = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int minn = Integer.MAX_VALUE;
+            for (int j = 1; j * j <= i; j++) {
+                minn = Math.min(minn, f[i - j * j]);
+            }
+            f[i] = minn + 1;
+        }
+        return f[n];
+
+
+    }
+}
+```
+
+
+
 ## 图论
 
 #### [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
