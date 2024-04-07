@@ -1909,6 +1909,36 @@ class Solution {
 
 #### [46. 全排列](https://leetcode.cn/problems/permutations/)
 
+```java
+class Solution {
+    List<List<Integer>> res=new ArrayList<>();
+    List<Integer> tmp=new ArrayList<>();
+    boolean [] used;
+    public List<List<Integer>> permute(int[] nums) {
+        used=new boolean [nums.length];
+        dfs(nums);
+        return res;
+    }
+
+    public void dfs(int[] nums){
+        if(tmp.size()==nums.length){
+            res.add(new ArrayList<>(tmp));
+            return;
+        }
+        for(int i=0;i<nums.length;i++){
+            if(true==used[i]){
+               continue;
+            }
+            used[i]=true;
+            tmp.add(nums[i]);
+            dfs(nums);
+            tmp.remove(tmp.size()-1);
+            used[i]=false;
+        }
+    }
+}
+```
+
 
 
 #### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
