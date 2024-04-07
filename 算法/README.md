@@ -955,6 +955,28 @@ class Solution {
 }
 ```
 
+#### [230. 二叉搜索树中第K小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/)
+
+```java
+class Solution {
+    int result,n;
+    public int kthSmallest(TreeNode root, int k) {
+        n = k;
+        traversal(root);
+        return result;
+    }
+    public void traversal(TreeNode root){
+        if(root==null) return ;
+        traversal(root.left);
+        if(n==0) return ;
+        if(--n==0) result=root.val;
+        traversal(root.right);
+        
+    }
+
+}
+```
+
 
 
 ## 哈希表
