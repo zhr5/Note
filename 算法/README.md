@@ -1825,6 +1825,88 @@ void backtracking(参数) {
 }
 ```
 
+### 组合问题
+
+#### [77. 组合](https://leetcode.cn/problems/combinations/)
+
+```java
+class Solution {
+    List<List<Integer>> result= new ArrayList<>();
+    LinkedList<Integer> path = new LinkedList<>();
+    public List<List<Integer>> combine(int n, int k) {
+        backtracking(n,k,1);
+        return result;
+    }
+
+    public void backtracking(int n,int k,int startIndex){
+        if (path.size() == k){
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i =startIndex;i<=n;i++){
+            path.add(i);
+            backtracking(n,k,i+1);
+            path.removeLast();
+        }
+    }
+}
+```
+
+```java
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();
+    LinkedList<Integer> path = new LinkedList<>();
+    public List<List<Integer>> combine(int n, int k) {
+        combineHelper(n, k, 1);
+        return result;
+    }
+
+    /**
+     * 每次从集合中选取元素，可选择的范围随着选择的进行而收缩，调整可选择的范围，就是要靠startIndex
+     * @param startIndex 用来记录本层递归的中，集合从哪里开始遍历（集合就是[1,...,n] ）。
+     */
+    private void combineHelper(int n, int k, int startIndex){
+        //终止条件
+        if (path.size() == k){
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = startIndex; i <= n - (k - path.size()) + 1; i++){
+            path.add(i);
+            combineHelper(n, k, i + 1);
+            path.removeLast();
+        }
+    }
+}
+```
+
+#### [78. 子集](https://leetcode.cn/problems/subsets/)
+
+```java
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();// 存放符合条件结果的集合
+    LinkedList<Integer> path = new LinkedList<>();// 用来存放符合条件结果
+    public List<List<Integer>> subsets(int[] nums) {
+        subsetsHelper(nums, 0);
+        return result;
+    }
+
+    private void subsetsHelper(int[] nums, int startIndex){
+        result.add(new ArrayList<>(path));//「遍历这个树的时候，把所有节点都记录下来，就是要求的子集集合」。
+        if (startIndex >= nums.length){ //终止条件可不加
+            return;
+        }
+        for (int i = startIndex; i < nums.length; i++){
+            path.add(nums[i]);
+            subsetsHelper(nums, i + 1);
+            path.removeLast();
+        }
+    }
+}
+```
+
+
+
 #### [46. 全排列](https://leetcode.cn/problems/permutations/)
 
 
