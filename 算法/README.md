@@ -1183,6 +1183,42 @@ class Solution {
 }
 ```
 
+#### [522. 最长特殊序列 II](https://leetcode.cn/problems/longest-uncommon-subsequence-ii/)
+
+```java
+class Solution {
+   public int findLUSlength(String[] strs) {
+        int n = strs.length;
+        int ans = -1;
+        for (int i = 0; i < n; i++) {
+            boolean check = false;//s1是否是s2的子串(可通过删减s2得到s1)
+            for (int j = 0; j < n; j++) {
+                if (i != j && isSubseq(strs[i], strs[j])) {
+                    check = true;
+                    break;//只要找到一个s1是s2的子串的情况,s1就不再是特殊序列,寻找下一个i
+                }
+            }
+            if (!check) {
+                ans = Math.max(ans, strs[i].length());
+            }
+        }
+        return ans;
+    }
+
+    public boolean isSubseq(String s, String t) {
+        int p1 = 0, p2 = 0;
+        while (p1 < s.length() && p2 < t.length()) {
+            if (s.charAt(p1) == t.charAt(p2)) {
+               p1++;
+            }
+            p2++;
+        }
+        return p1 == s.length();
+    }
+
+}
+```
+
 
 
 ## 滑动窗口
