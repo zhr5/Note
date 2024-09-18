@@ -47,7 +47,47 @@
 
 
 
-#### 
+# 常用API
+
+## 集合
+
+| 类/接口       | 描述     | 方法                                                         |
+| :------------ | :------- | :----------------------------------------------------------- |
+| String        | 字符串   | charAt  toCharArray  split  substring  indexOf  lastIndexOf  replace  length |
+| List          | 列表     | add  remove  get  size  subList                              |
+| Stack         | 栈       | push  pop  peek  isEmpty  size                               |
+| Queue         | 队列     | offer  poll  peek  isEmpty  size                             |
+| Deque         | 双向队列 | offerFirst  offerLast  pollFirst pollLast  peekFirst  peekLast isEmpty  size |
+| PriorityQueue | 优先队列 | offer poll peek isEmpty size                                 |
+| Set           |          | add  remove  contains  isEmpty  size  first(TreeSet)  last(TreeSet) |
+| Map           |          | put  get  getOrDefault  containsKey  containsValue  keySet  values  isEmpty size |
+
+## 数组
+
+### Arrays
+
+Arrays是比较常用的数组工具类，可以完成排序、拷贝等功能。
+
+- 从小到大排序：Arrays.sort(int[] arr)``Arrays.sort(int[] arr, int fromIndex, int toIndex)
+
+```java
+Arrays.sort(int[] arr, int fromIndex, int toIndex, 比较器);   //一定是需要泛型
+
+Arrays.sort(arr, (o1, o2) -> o2 - o1);   //数组全部 从大到小排序 跟Collections.sort()一样
+
+Arrays.sort(arr, 0, 3, (o1, o2) -> o2 - o1);   //从大到小排序，只排序[0, 3)
+```
+
+- 拷贝：Array.copyOf
+
+```java
+int[] a = new int[5];
+int[] newA = Array.copyOf(a, 5);
+```
+
+
+
+
 
 # 分类
 
