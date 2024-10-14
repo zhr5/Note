@@ -470,6 +470,66 @@ public  int findMin(int[] nums) {
 
 
 
+#### [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
+
+方法一：
+
+```java
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        //哈希标记法
+        //本题利用负号来标记，nums[i]<0表示i+1存在
+        int n = nums.length;
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] <= 0) {
+                nums[i] = n + 1;
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            int num = Math.abs(nums[i]);
+            if (num <= n) {
+                nums[num - 1] = -Math.abs(nums[num - 1]);
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] > 0) {
+                return i + 1;
+            }
+        }
+        return n + 1;
+
+    }
+}
+```
+
+方法二：
+
+```java
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        //置换法
+        int n=nums.length;
+        for(int i=0;i<n;i++){
+            while(nums[i]>0&&nums[i]<=n&&nums[nums[i]-1]!=nums[i]){
+                int tmp=nums[nums[i]-1];
+                nums[nums[i]-1]=nums[i];
+                nums[i]=tmp;
+            }
+        }
+
+        for(int i=0;i<n;i++){
+            if(nums[i]!=i+1){
+                return i+1;
+            }
+        }
+
+        return n+1;
+    }
+}
+```
+
+
+
 ### 移除元素
 
 #### [27. 移除元素](https://leetcode.cn/problems/remove-element/)
@@ -556,6 +616,10 @@ class Solution {
 
 }
 ```
+
+#### [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
+
+
 
 ### 矩阵
 
@@ -843,9 +907,9 @@ class Solution {
 #### [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
 
 ```java
-//头插法
+//头插法-带虚拟头节点
 class Solution {
-    public ListNode reverseList(ListNode head) {     
+    public ListNode reverseList(ListNode head) {  
         ListNode preHead=new ListNode();
         ListNode p=head;
         ListNode q=null;
@@ -858,7 +922,24 @@ class Solution {
         return preHead.next;
     }
 }
+
+//头插法-不带虚拟头节点   和迭代法一样
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr!= null) {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+        return prev;
+    }
+}
 ```
+
+
 
 
 
@@ -2460,6 +2541,10 @@ class Solution {
     }
 }
 ```
+
+
+
+#### [123. 买卖股票的最佳时机 III](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/)
 
 
 
