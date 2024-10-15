@@ -889,7 +889,7 @@ class Solution {
     public ListNode [] reverse(ListNode l,ListNode r){
         //反转【l,r】并返回节点起始和结束节点
         //迭代法反转链表
-        ListNode prev=r.next;
+        ListNode prev=r.next;//ListNode prev=null也可以因为上面保存了r的下一个节点不会断链，ListNode prev=null写法可以和反转链表模板一致
         ListNode p=l;
         while(prev!=r){
             ListNode nex = p.next;
