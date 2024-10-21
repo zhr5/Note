@@ -51,16 +51,16 @@
 
 ## 集合
 
-| 类/接口       | 描述     | 方法                                                         |
-| :------------ | :------- | :----------------------------------------------------------- |
-| String        | 字符串   | charAt  toCharArray  split  substring  indexOf  lastIndexOf  replace  length |
-| List          | 列表     | add  remove  get  size  subList                              |
-| Stack         | 栈       | push  pop  peek  isEmpty  size                               |
-| Queue         | 队列     | offer  poll  peek  isEmpty  size                             |
-| Deque         | 双向队列 | offerFirst  offerLast  pollFirst pollLast  peekFirst  peekLast isEmpty  size |
-| PriorityQueue | 优先队列 | offer poll peek isEmpty size                                 |
-| Set           |          | add  remove  contains  isEmpty  size  first(TreeSet)  last(TreeSet) |
-| Map           |          | put  get  getOrDefault  containsKey  containsValue  keySet  values  isEmpty size |
+| 类/接口       | 描述     | 定义                                        | 方法                                                         |
+| :------------ | :------- | ------------------------------------------- | :----------------------------------------------------------- |
+| String        | 字符串   |                                             | charAt  toCharArray  split  substring  indexOf  lastIndexOf  replace  length |
+| List          | 列表     |                                             | add  remove  get  size  subList                              |
+| Stack         | 栈       | new LinkedList<>()                          | push  pop  peek  isEmpty  size                               |
+| Queue         | 队列     | new LinkedList<>()                          | offer  poll  peek  isEmpty  size                             |
+| Deque         | 双向队列 | new LinkedList<>()        newArrayDeque<>() | offerFirst  offerLast  pollFirst pollLast  peekFirst  peekLast isEmpty  size |
+| PriorityQueue | 优先队列 |                                             | offer poll peek isEmpty size                                 |
+| Set           |          |                                             | add  remove  contains  isEmpty  size  first(TreeSet)  last(TreeSet) |
+| Map           |          |                                             | put  get  getOrDefault  containsKey  containsValue  keySet  values  isEmpty size |
 
 ## 数组
 
@@ -1672,6 +1672,35 @@ class Solution {
 ```
 
 ## 二叉树
+
+#### [102. 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+```java
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root==null) return res;
+        Queue<TreeNode> q =new LinkedList<>();
+        q.offer(root);
+        while(!q.isEmpty()){
+            int len = q.size();
+            List<Integer> tmp = new ArrayList<>();
+            while(len-->0){
+                TreeNode node = q.poll();
+                tmp.add(node.val);
+                if(node.left!=null) 
+                    q.offer(node.left);
+                if(node.right!=null) 
+                    q.offer(node.right);
+            }
+            res.add(tmp);           
+        }
+        return res;
+    }
+}
+```
+
+
 
 #### [98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
