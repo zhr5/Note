@@ -2375,6 +2375,94 @@ class Solution {
 }
 ```
 
+#### [131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
+
+##### 回溯
+
+```java
+class Solution {
+    //保持前几题一贯的格式， initialization
+    List<List<String>> res = new ArrayList<>();
+    List<String> cur = new ArrayList<>();
+    public List<List<String>> partition(String s) {
+        backtracking(s, 0, new StringBuilder());
+        return res;
+    }
+    private void backtracking(String s, int start, StringBuilder sb){
+        //因为是起始位置一个一个加的，所以结束时start一定等于s.length,因为进入backtracking时一定末尾也是回文，所以cur是满足条件的
+        if (start == s.length()){
+            //注意创建一个新的copy
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        //像前两题一样从前往后搜索，如果发现回文，进入backtracking,起始位置后移一位，循环结束照例移除cur的末位
+        for (int i = start; i < s.length(); i++){
+            sb.append(s.charAt(i));
+            if (check(sb)){
+                cur.add(sb.toString());
+                backtracking(s, i + 1, new StringBuilder());
+                cur.remove(cur.size() -1 );
+            }
+        }
+    }
+
+    //helper method, 检查是否是回文
+    private boolean check(StringBuilder sb){
+        for (int i = 0; i < sb.length()/ 2; i++){
+            if (sb.charAt(i) != sb.charAt(sb.length() - 1 - i)){return false;}
+        }
+        return true;
+    }
+}
+```
+
+##### 动态规划
+
+```java
+class Solution {
+    boolean[][] f;
+    List<List<String>> ret = new ArrayList<List<String>>();
+    List<String> ans = new ArrayList<String>();
+    int n;
+
+    public List<List<String>> partition(String s) {
+        n = s.length();
+        f = new boolean[n][n];
+        for (int i = 0; i < n; ++i) {
+            Arrays.fill(f[i], true);
+        }
+
+        for (int i = n - 1; i >= 0; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                f[i][j] = (s.charAt(i) == s.charAt(j)) && f[i + 1][j - 1];
+            }
+        }
+
+        dfs(s, 0);
+        return ret;
+    }
+
+    public void dfs(String s, int i) {
+        if (i == n) {
+            ret.add(new ArrayList<String>(ans));
+            return;
+        }
+        for (int j = i; j < n; ++j) {
+            if (f[i][j]) {
+                ans.add(s.substring(i, j + 1));
+                dfs(s, j + 1);
+                ans.remove(ans.size() - 1);
+            }
+        }
+    }
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/palindrome-partitioning/solutions/639633/fen-ge-hui-wen-chuan-by-leetcode-solutio-6jkv/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 
 
 #### [93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
@@ -2799,6 +2887,55 @@ class Solution {
 }
 ```
 
+```java
+class Solution {
+    public int numSquares(int n) {
+        int [] dp=new int [n+1];
+        //dp[i]表示和为 i 的完全平方数的最少数量 dp[j]=min(dp[j-i*i]+1,dp[j])
+        // 完全平方数就是物品（可以无限件使用），凑个正整数n就是背包容量，问凑满这个背包最少有多少物品？
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0]=0;
+        for(int i=0;i<=n;i++){
+            for(int j=1;j*j<=i;j++){
+                dp[i]=Math.min(dp[i-j*j]+1,dp[i]);
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+
+
+##### 求完全平方数结果集合
+
+```java
+    public  List<Integer> findMinSquares(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            dp[i] = Integer.MAX_VALUE;
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j * j <= i; j++) {
+                dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+            }
+        }
+        List<Integer> result = new ArrayList<>();
+        while (n > 0) {
+            for (int j = 1; j * j <= n; j++) {
+                if (dp[n] == dp[n - j * j] + 1) {
+                    result.add(j * j);
+                    n -= j * j;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+```
+
+
+
 #### [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
 
 ```java
@@ -2822,6 +2959,245 @@ class Solution {
             }
         }
         return dp[text1.length()][text2.length()];
+    }
+}
+```
+
+#### [3259. 超级饮料的最大强化能量](https://leetcode.cn/problems/maximum-energy-boost-from-two-drinks/)
+
+```java
+class Solution {
+    public long maxEnergyBoost(int[] energyDrinkA, int[] energyDrinkB) {
+       int n = energyDrinkA.length;
+        long[][] d = new long[n + 1][2];//dp[i][j]表示 饮料A 0...i 饮料B 0...j接下来的 n 小时内你能获得的 最大总强化能量
+        for (int i = 1; i <= n; i++) {
+            d[i][0] = d[i - 1][0] + energyDrinkA[i - 1];//energyDrinkA[0]第1瓶饮料
+            d[i][1] = d[i - 1][1] + energyDrinkB[i - 1];
+            if (i >= 2) {
+                d[i][0] = Math.max(d[i][0], d[i - 2][1] + energyDrinkA[i - 1]);
+                d[i][1] = Math.max(d[i][1], d[i - 2][0] + energyDrinkB[i - 1]);
+            }
+        }
+        return Math.max(d[n][0], d[n][1]);
+
+    }
+}
+```
+
+#### [72. 编辑距离](https://leetcode.cn/problems/edit-distance/)
+
+```java
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int len1=word1.length();
+        int len2=word2.length();
+        int [][] dp = new int [len1+1][len2+1];//dp[i][j] 表示 word1 [0,i] word2[0,j] 的编辑距离
+        for(int i=1;i<=len1;i++){
+            dp[i][0]=i;
+        }
+        for(int j=1;j<=len2;j++){
+            dp[0][j]=j;
+        }      
+        for(int i=1;i<=len1;i++){
+            for(int j=1;j<=len2;j++){
+                if(word1.charAt(i-1)==word2.charAt(j-1)){
+                    dp[i][j]=dp[i-1][j-1];
+                }else{
+                     dp[i][j]=Math.min(Math.min(dp[i-1][j-1],dp[i-1][j]),dp[i][j-1])+1;
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+}
+```
+
+#### [32. 最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/)
+
+##### 方法一：动态规划
+
+```mermaid
+graph TD
+    A[开始] --> B{当前字符是 `)`?}
+    B -->|No| C[下一个字符]
+    B -->|Yes| D{前一个字符是 `(`?}
+    D -->|Yes| E[更新 dp[i] = dp[i - 2] + 2]
+    D -->|No| F{更远位置能形成有效括号?}
+    F -->|No| G[下一个字符]
+    F -->|Yes| H[更新 dp[i] = dp[i - 1] + dp[i - dp[i - 1] - 2] + 2]
+    E --> I[更新 maxans]
+    H --> I
+    I --> J[下一个字符]
+    J --> K{遍历结束?}
+    K -->|No| B
+    K -->|Yes| L[返回 maxans]
+
+
+```
+
+
+
+```java
+class Solution {
+    public int longestValidParentheses(String s) {
+        int maxans = 0;
+        int[] dp = new int[s.length()];
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == ')') {
+                if (s.charAt(i - 1) == '(') {
+                    dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
+                } else if (i - dp[i - 1] > 0 && s.charAt(i - dp[i - 1] - 1) == '(') {
+                    dp[i] = dp[i - 1] + ((i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0) + 2;
+                }
+                maxans = Math.max(maxans, dp[i]);
+            }
+        }
+        return maxans;
+    }
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/longest-valid-parentheses/solutions/314683/zui-chang-you-xiao-gua-hao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+##### 方法二：栈
+
+```java
+class Solution {
+    public int longestValidParentheses(String s) {
+        int maxans = 0;
+        Deque<Integer> stack = new LinkedList<Integer>();
+        stack.push(-1);
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                stack.push(i);
+            } else {
+                stack.pop();
+                if (stack.isEmpty()) {
+                    stack.push(i);
+                } else {
+                    maxans = Math.max(maxans, i - stack.peek());
+                }
+            }
+        }
+        return maxans;
+    }
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/longest-valid-parentheses/solutions/314683/zui-chang-you-xiao-gua-hao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+##### 方法三：不需要额外的空间
+
+```java
+class Solution {
+    public int longestValidParentheses(String s) {
+        int left = 0, right = 0, maxlength = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                maxlength = Math.max(maxlength, 2 * right);
+            } else if (right > left) {
+                left = right = 0;
+            }
+        }
+        left = right = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                maxlength = Math.max(maxlength, 2 * left);
+            } else if (left > right) {
+                left = right = 0;
+            }
+        }
+        return maxlength;
+    }
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/longest-valid-parentheses/solutions/314683/zui-chang-you-xiao-gua-hao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+#### [131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
+
+```java
+class Solution {
+    //保持前几题一贯的格式， initialization
+    List<List<String>> res = new ArrayList<>();
+    List<String> cur = new ArrayList<>();
+    public List<List<String>> partition(String s) {
+        backtracking(s, 0, new StringBuilder());
+        return res;
+    }
+    private void backtracking(String s, int start, StringBuilder sb){
+        //因为是起始位置一个一个加的，所以结束时start一定等于s.length,因为进入backtracking时一定末尾也是回文，所以cur是满足条件的
+        if (start == s.length()){
+            //注意创建一个新的copy
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        //像前两题一样从前往后搜索，如果发现回文，进入backtracking,起始位置后移一位，循环结束照例移除cur的末位
+        for (int i = start; i < s.length(); i++){
+            sb.append(s.charAt(i));
+            if (check(sb)){
+                cur.add(sb.toString());
+                backtracking(s, i + 1, new StringBuilder());
+                cur.remove(cur.size() -1 );
+            }
+        }
+    }
+
+    //helper method, 检查是否是回文
+    private boolean check(StringBuilder sb){
+        for (int i = 0; i < sb.length()/ 2; i++){
+            if (sb.charAt(i) != sb.charAt(sb.length() - 1 - i)){return false;}
+        }
+        return true;
+    }
+}
+```
+
+#### [322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+    
+        int max = Integer.MAX_VALUE;
+        int[] dp = new int[amount + 1];//凑足总额为j所需钱币的最少个数为dp[j]
+        //初始化dp数组为最大值
+        for (int j = 0; j < dp.length; j++) {
+            dp[j] = max;
+        }
+        //当金额为0时需要的硬币数目为0
+        dp[0] = 0;
+        for (int i = 0; i < coins.length; i++) {
+            //正序遍历：完全背包每个硬币可以选择多次
+            for (int j = coins[i]; j <= amount; j++) {
+                //只有dp[j-coins[i]]不是初始最大值时，该位才有选择的必要
+                if (dp[j - coins[i]] != max) {
+                    //选择硬币数目最小的情况
+                    dp[j] = Math.min(dp[j], dp[j - coins[i]] + 1);
+                }
+            }
+        }
+        return dp[amount] == max ? -1 : dp[amount];
+
     }
 }
 ```
@@ -2864,6 +3240,8 @@ class Solution {
 
 
 
+
+------
 
 
 
