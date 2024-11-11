@@ -2773,9 +2773,55 @@ class Solution {
 }
 ```
 
+#### [121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
 
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int max=0;
+        int minPrice=prices[0];
+        for(int i=0;i<prices.length;i++){
+            minPrice=Math.min(minPrice,prices[i]);
+            max=Math.max(max,prices[i]-minPrice);
+        }
+        return max;
+    }
+}
+```
+
+#### [122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int max=0;
+        for(int i=0;i<prices.length-1;i++){
+            max=max+Math.max(0,prices[i+1]-prices[i]);
+        }
+        return max;
+    }
+}
+```
 
 #### [123. 买卖股票的最佳时机 III](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/)
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+       int n = prices.length;
+        int buy1 = -prices[0], sell1 = 0;
+        int buy2 = -prices[0], sell2 = 0;
+        for (int i = 1; i < n; ++i) {
+            buy1 = Math.max(buy1, -prices[i]);
+            sell1 = Math.max(sell1, buy1 + prices[i]);
+            buy2 = Math.max(buy2, sell1 - prices[i]);
+            sell2 = Math.max(sell2, buy2 + prices[i]);
+        }
+        return sell2;
+
+    }
+}
+```
 
 
 
@@ -4882,6 +4928,35 @@ class Solution {
         while(index<nums.length){   
             nums[index++]=0;   
         }   
+    }
+}
+```
+
+#### [347. 前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements/)
+
+```java
+class Solution {
+    public  int [] topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> count = new HashMap();
+    for (int n: nums) {
+      count.put(n, count.getOrDefault(n, 0) + 1);
+    }
+    //新建小顶堆
+
+      PriorityQueue<Integer> heap = new PriorityQueue<>((n1,n2)-> count.get(n1)-count.get(n2));
+      for (int n: count.keySet()) {//遍历key集合
+        heap.add(n);
+        if (heap.size() > k)
+            heap.poll();
+        }
+
+        int [] res=new int[heap.size()];
+        int i=0;
+        while (!heap.isEmpty())
+            res[i++]=heap.poll();
+
+        return res;
+
     }
 }
 ```
