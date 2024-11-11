@@ -62,6 +62,20 @@
 | Set           |          |                                             | add  remove  contains  isEmpty  size  first(TreeSet)  last(TreeSet) |
 | Map           |          |                                             | put  get  getOrDefault  containsKey  containsValue  keySet  values  isEmpty size |
 
+
+
+String  常用的方法
+
+```java
+toCharArray()
+length()
+charAt()
+substring(int beginIndex)      [begin,end]
+substring(int beginIndex,int endIndex)  [beginIndex,endIndex)
+```
+
+
+
 ## 数组
 
 ### Arrays
